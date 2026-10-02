@@ -1,6 +1,6 @@
 {
   "name": "@codexsun/framework",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "exports": {
@@ -27,6 +27,14 @@
     "github:now": "devxcrew-tools github:now",
     "version:update": "devxcrew-tools version:bump",
     "fix:line-endings": "devxcrew-tools lines:fix",
-    "check:versions": "devxcrew-tools check:versions"
+    "check:versions": "devxcrew-tools check:versions",
+    "version:show": "devxcrew-tools version:show",
+    "version:bump": "devxcrew-tools version:bump",
+    "changelog:append": "devxcrew-tools changelog:append",
+    "changelog:show": "devxcrew-tools changelog:show",
+    "tools:lines:fix": "devxcrew-tools lines:fix",
+    "lines:check": "devxcrew-tools lines:check",
+    "tools:check": "devxcrew-tools dependencies:order && devxcrew-tools check:versions && devxcrew-tools lines:check",
+    "check": "npm run tools:check"
   }
 }
