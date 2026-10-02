@@ -25,3 +25,7 @@ npm run github:now -- --dry-run
 ```
 
 Version updates and changelog appends change local files. github:now without --dry-run can commit and push after its review prompts. Reusable UI and framework packages keep their package-specific build contracts; the gallery keeps its standalone Vite workspace.
+
+## Common governance MCP
+
+Use npm run mcp:connect for read-only repository, UI, and code guidance. It continues offline using the guides in assist/governance. Configure the connection through .env.example. See assist/GOVERNANCE.md for headers and client setup. This command is independent of application startup and verification.

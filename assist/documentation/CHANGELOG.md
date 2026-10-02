@@ -2,11 +2,23 @@
 
 ## Version State
 
-Current version: 0.1.3
+Current version: 0.1.4
 
-Release tag: v-0.1.3
+Release tag: v-0.1.4
 
-Changelog label: v 0.1.3
+Changelog label: v 0.1.4
+
+## v-0.1.4
+
+### [v 0.1.4] 2026-10-02 8:56 pm - Common MCP governance guidance
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Added optional authenticated MCP instruction retrieval, connection settings, app identity, and common offline repository and UI guides. Governance remains advisory and does not gate startup or builds. Verified all six live MCP connections, four MCP protocol tests, common offline fallback, and repository checks. Cxsun production routes and UIUX builds passed.
 
 ## v-0.1.3
 
