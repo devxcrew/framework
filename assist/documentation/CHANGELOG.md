@@ -2,11 +2,23 @@
 
 ## Version State
 
-Current version: 0.1.2
+Current version: 0.1.3
 
-Release tag: v-0.1.2
+Release tag: v-0.1.3
 
-Changelog label: v 0.1.2
+Changelog label: v 0.1.3
+
+## v-0.1.3
+
+### [v 0.1.3] 2026-10-02 8:32 pm - Published npm tools integration
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Replaced the local tools archive with the pinned npm package @devxcrew/tools@0.1.3. Updated shared maintenance commands and removed the bundled tools archive. Passed dependency order, version alignment, and LF checks with the published tools package.
 
 ## v-0.1.2
 
