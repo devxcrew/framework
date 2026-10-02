@@ -2,13 +2,35 @@
 
 ## Version State
 
-Current version: 0.1.4
+Current version: 0.1.5
 
-Release tag: v-0.1.4
+Release tag: v-0.1.5
 
-Changelog label: v 0.1.4
+Changelog label: v 0.1.5
+
+## v-0.1.5
+
+### [v 0.1.5] 2026-10-02 9:41 pm - Central governance and repository agent layout
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Connected central governance and maintenance commands; preserved framework ownership and release history. Repository checks passed.
 
 ## v-0.1.4
+
+### [v 0.1.4] 2026-10-02 9:30 pm - Central governance and repository agent layout
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Moved common guidance and audits to mcp-governance, preserved repository changelog history in agent/CHANGELOG.md, added local task and plan records, and wired centralized maintenance commands with legacy tools compatibility.
 
 ### [v 0.1.4] 2026-10-02 8:56 pm - Common MCP governance guidance
 
