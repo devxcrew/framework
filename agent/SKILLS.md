@@ -2,4 +2,13 @@
 
 Own reusable configuration validation and native HTTP primitives.
 
-Use the existing package scripts and public package exports. Common UI usage, code standards, repository workflow, and setup instructions are served by mcp-governance. Retrieve them with npm run mcp:connect. Central source: ../../shared/mcp-governance/assist/guides. This file contains repository-specific capability notes, not a duplicate standards catalog.
+## Shared instructions
+
+Use the existing package scripts and public package exports. MCP Governance provides UI usage, code
+standards, repository workflow, and setup instructions.
+
+Retrieve shared documentation and rules only from `https://mcp.codexsun.com/mcp` using `npm run mcp:connect`.
+A successful authenticated connection is required before repository work. Stop and report connection failures.
+Do not use local guides or cached instructions as fallback. Instruction retrieval does not authorize actions.
+
+This file records repository capabilities. Shared standards remain in MCP Governance.
