@@ -1,4 +1,23 @@
-# Current foundation tasks
+# Current task
+
+## Completion wave - 2026-10-04
+
+Source 0.1.8 includes bounded startup, cancellation, cleanup and seven runtime tests. Earlier no-test and no-deadline statements are historical. This wave documents module-owned transaction and retry responsibilities and adds three-OS CI.
+
+- [x] Reconcile current status with the GitHub source release and latest owner audit.
+- [x] Retrieve fresh authenticated cloud governance before this wave.
+- [x] Apply the user-selected MIT license to first-party source, package metadata and lock metadata.
+- [x] Record this wave's affected checks and accept only gates with direct evidence.
+
+npm run release:check passed seven runtime tests, build, LF/version checks and a 13-file MIT package.
+- [x] Prepare isolated CI coverage for the target Windows/Linux/macOS runtime.
+- [ ] Verify this wave's exact GitHub CI results.
+
+
+Use projects/cxsun/agent/REMAINING-WORK.md for ordered cross-owner dependencies.
+Production deployment and real SMTP acceptance remain deferred. No pending external gate is marked complete.
+
+## Prior records
 
 <!-- foundation-checklist:start -->
 

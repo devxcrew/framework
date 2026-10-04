@@ -10,6 +10,15 @@ Changelog label: v 0.1.8
 
 ## v-0.1.8
 
+### Local completion preparation - 2026-10-04
+
+- Reconcile task status and preserve historical evidence.
+- Apply the user-selected MIT license to first-party code and packed metadata.
+- Add or expand isolated Windows, Linux and macOS source CI.
+- npm run release:check passed seven runtime tests, build, LF/version checks and a 13-file MIT package.
+- Publication and external acceptance gates remain open.
+
+
 ### [v 0.1.8] 2026-10-04 5:00 pm - Deliver shared runtime foundation
 
 #### Database Changes

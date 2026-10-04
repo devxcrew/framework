@@ -128,3 +128,12 @@ Consumers must report failed cleanup and apply their process termination policy.
 Set startupTimeoutMs in composeModules options. The default total startup budget is 30000 milliseconds.
 Start hooks receive the owner provider and an AbortSignal. Timeout aborts the signal and rolls back started modules.
 An uncooperative hook can continue. Owners must honor cancellation before acquiring or retaining resources.
+
+## Consumer transaction and cancellation contract
+
+Framework owns request deadlines and cancellation signals. The module that owns a mutation owns its database transaction.
+A module validates authorization and input before persistence. It checks cancellation before a write and before committing.
+Cancellation after a successful commit does not roll back committed data. A client must reload before retrying an uncertain mutation.
+Existing identity updates use expectedVersion for stale-write detection. Token completion uses a single database claim.
+Do not retry POST mutations automatically. Add an idempotency key only when a real consumer requires repeatable retries.
+Synchronous identity operations need no generic event bus or queue. External delivery stays outside a database transaction.
