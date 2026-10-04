@@ -2,11 +2,35 @@
 
 ## Version State
 
-Current version: 0.1.6
+Current version: 0.1.8
 
-Release tag: v-0.1.6
+Release tag: v-0.1.8
 
-Changelog label: v 0.1.6
+Changelog label: v 0.1.8
+
+## v-0.1.8
+
+### [v 0.1.8] 2026-10-04 5:00 pm - Deliver shared runtime foundation
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Add public provider composition, bounded startup and shutdown, request cancellation, safe HTTP contracts and runtime regression checks.
+
+## v-0.1.7
+
+### [v 0.1.7] 2026-10-03 9:08 am - Prepare public npm package
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Publish under the devxcrew npm scope with explicit public exports, release verification, and consumer development instructions.
 
 ## v-0.1.6
 
@@ -245,3 +269,21 @@ Changelog label: v 0.1.6
 
 - Enforced the cloud endpoint for direct client imports and validated instruction identity.
 - Extended cloud request timeouts to 15 seconds and verified all live resources and tools.
+
+## npm package names — 2026-10-03
+
+- Use @devxcrew/core-framework and @devxcrew/react-ui because the original package names are under an npm unpublished-name hold.
+- Updated public imports, package manifests, local development commands, and common guidance.
+
+## npm migration completion — 2026-10-03
+
+- Passed: @devxcrew/core-framework@0.1.7 and @devxcrew/react-ui@0.1.7 are public in the npm registry.
+- Passed: Cxsun installed both registry packages and records registry URLs and integrity hashes in its lockfile.
+- Passed: UIUX typecheck and production build with the new UI package name. UIUX intentionally keeps its local source gallery dependency.
+- Passed: Governance cloud checks, deployment, and authenticated connections from all six repositories.
+- Passed: Tools source compatibility tests (21 tests). Tools npm publication was not part of this release.
+- Untested: Real identity, RBAC, and tenancy; these remain outside this package migration.
+
+## Unreleased startup completion - 2026-10-04
+
+Add bounded startup, cancellation and reverse cleanup regression. Seven tests and release:check pass. Proposed release 0.1.8.

@@ -1,5 +1,18 @@
 # Verification evidence
 
+## Independent review - 2026-10-04
+
+Passed: `npm run mcp:connect` authenticated against the required cloud endpoint.
+Passed: `npm run release:check`, six tests, TypeScript builds, package dry run, version alignment and LF checks.
+Reviewed: provider dependency boundaries, startup cleanup, shutdown deadlines, API errors, request cancellation and static path containment.
+The earlier sibling-maintenance and missing-test findings are historical. Current scripts use installed Tools and six runtime tests.
+Open: start hooks can wait without a deadline. Agree a startup timeout contract and verify an unresponsive owner before operational acceptance.
+Open: provider factories must acquire resources during start hooks. Construction failure cannot clean arbitrary factory side effects.
+Partial: handler cancellation and shutdown are cooperative. JavaScript cannot preempt synchronous work or forcibly stop external promises.
+Untested here: performance budgets, production TLS/proxy policies and clean released consumer installation.
+Source changes use existing version 0.1.7. A successful local dry run does not prove registry availability of new APIs.
+No implementation source, operational data, release version, publication, commit, push or deployment changed in this review.
+
 ## Passed
 
 - Live MCP retrieval verified the foundation guide, audit/todo records, and application metadata
@@ -57,3 +70,105 @@
 - Passed npm run check: dependency order, aligned release metadata, and LF checks.
 - Passed authenticated live MCP connection, release metadata, LF, and configured-secret scans.
 - Prepared commit subject: #6 - Require audited cloud MCP guidance.
+
+## npm migration — 2026-10-03
+
+- Passed public package preparation for Framework and UI version 0.1.7.
+- Passed packed package consumption, Cxsun full verification, UIUX verification, and eight governance tests.
+- npm CLI login and device authentication succeeded as devxcrew.
+- Publication returned E409. Registry metadata records Framework unpublished at 2026-10-03 03:30:32 UTC and UI at 03:32:35 UTC.
+- npm blocks the same package names for 24 hours. Both names should be eligible after October 4 at 09:03 IST.
+- Blocked: registry publication, registry installation, and final project lockfile generation.
+- Cxsun currently runs with explicitly installed local packed snapshots. Its manifest names the intended npm versions.
+- Do not treat the current project lockfile as a completed registry migration.
+
+## npm migration completion — 2026-10-03
+
+- Passed: @devxcrew/core-framework@0.1.7 and @devxcrew/react-ui@0.1.7 are public in the npm registry.
+- Passed: Cxsun installed both registry packages and records registry URLs and integrity hashes in its lockfile.
+- Passed: UIUX typecheck and production build with the new UI package name. UIUX intentionally keeps its local source gallery dependency.
+- Passed: Governance cloud checks, deployment, and authenticated connections from all six repositories.
+- Passed: Tools source compatibility tests (21 tests). Tools npm publication was not part of this release.
+- Untested: Real identity, RBAC, and tenancy; these remain outside this package migration.
+
+## Framework roadmap planning — 2026-10-03
+
+- Completed: expanded agent/PLAN.md with MVP modules, standard services, advanced options, ownership, runtime parameters, phases, and acceptance gates.
+- Passed: authenticated npm run mcp:connect and official NestJS, Next.js, Frappe, and Laravel documentation review.
+- Passed: npm run check for dependency order, version alignment, and LF checks.
+- Scope: documentation only. Proposed capabilities remain unimplemented and runtime acceptance tests remain untested.
+
+## Live MCP access audit — 2026-10-03
+
+- GREEN: authenticated live connection, matching repository metadata, five guidance resources, and all three MCP tools.
+- Central evidence: shared/mcp-governance/docs/mcp-access-audit.md.
+
+## Foundation owner baseline - 2026-10-04
+
+Verified 2026-10-04: release:check passed dependency order, version 0.1.7, line endings, TypeScript build, and package dry run. Source exports readApplicationConfig and createApplicationServer. API requests return 404 unless a development handler takes ownership. No framework test script or dedicated test files exist. Configuration is accepted by the server but is not applied there. Maintenance scripts still depend on a sibling MCP Governance checkout. README has stale Cxsun build and connection-failure statements.
+
+Framework source has three files. Provider registration, resource routing, request context, lifecycle coordination, health, and security hooks are planned capabilities. The package dry run contains eight files. No SQLite acceptance or live HTTP fault tests were run in this owner review.
+
+Owner PLAN.md and TASK.md now use the global master task IDs.
+Existing task and plan history was preserved. Changes are documentation only.
+Authenticated cloud MCP connection passed in the coordinating agent before owner inspection.
+
+## Foundation runtime implementation - 2026-10-04
+
+02.01 is in-review. Public exports now provide module composition, HTTP request context, safe errors, JSON parsing, and list query parsing.
+03.01 is in-review for the implemented subset. The server accepts an API handler, readiness callback, and validated receive/header timeouts.
+Static file serving checks resolved paths to prevent symlink escape.
+03.02 remains planned for transaction and stale-write integration. Database owners retain transaction and idempotency decisions.
+03.03 remains planned until an accepted asynchronous consumer requires transport.
+
+Passed: authenticated cloud MCP retrieval, TypeScript build, and three runtime tests with actual localhost HTTP requests.
+Passed: release:check, including dependency order, version alignment, line endings, and package dry run.
+HTTP tests cover malformed JSON, unsupported content types, oversized payloads, safe internal errors, unique request IDs, and readiness changes.
+Lifecycle tests cover dependency order, duplicates, missing dependencies, and cleanup after failed startup.
+No persistence was introduced. File-backed SQLite acceptance remains with Platform and Cxsun.
+Receive timeouts do not enforce a deadline on an asynchronous handler. Handler cancellation follows aborted client requests.
+Consumer integration, bounded shutdown, CORS/proxy/CSRF policy, and performance budgets remain required review work.
+No publication, version bump, commit, or deployment was performed.
+
+Review follow-up: four runtime tests now pass, including chunked oversized JSON returning 413 and concurrent lifecycle guards.
+Provider factories must defer resource acquisition until start hooks. Concurrent shutdown runs cleanup once.
+
+## Framework deadline verification - 2026-10-04
+
+06.01 is in-review for bounded handler response and shutdown cleanup behavior.
+Added handlerTimeoutMs, request deadlineAt, and cancellation at the response deadline.
+Added composeModules shutdownTimeoutMs with shared total cleanup budget and failed state on cleanup timeout.
+Six runtime tests pass. Real HTTP verification includes an unresponsive handler returning safe 504 with an aborted signal.
+Lifecycle verification includes unresponsive shutdown, bounded rejection, remaining hooks attempted, and persistent failed state.
+No claim covers performance budgets, Cxsun consumer acceptance, process termination, or synchronous JavaScript preemption.
+
+## Local completion wave - 2026-10-04
+
+- [x] 03.01.3 Bound startup hooks with a total startupTimeoutMs budget and cancellation signal.
+- [x] 06.01.3 Verify unresponsive startup abort and reverse resource cleanup.
+- [x] 03.03.1 Decision: no generic asynchronous transport is required by the current identity consumer.
+
+Seven Framework tests and release:check pass. Default startup and shutdown budgets are 30000 milliseconds each.
+Start hooks receive an AbortSignal. Owners must release resources after cancellation and avoid late acquisition.
+JavaScript cannot forcibly stop an uncooperative hook or synchronous execution.
+Framework owns runtime deadlines. App owners own process termination policy.
+Proposed next compatible release: @devxcrew/core-framework 0.1.8. The source manifest remains 0.1.7 until coordinated release approval.
+Upgrade: existing one-argument start hooks continue to work. Long startup hooks must explicitly configure the budget.
+No consumer requires a durable queue now. Add module-owned events or queues only when an accepted asynchronous workflow requires them.
+Remaining: independent registry consumer and production proxy/performance operational acceptance.
+No publication, commit, push or operational database change occurred.
+
+## Local scope clarification - 2026-10-04
+
+The user deferred production deployment. Complete and review the local foundation first.
+Current verified local substeps are checked in TASK.md. Production controls remain explicitly deferred.
+Registry release and app integration gates remain open. This clarification does not claim complete release or production acceptance.
+# Workspace GitHub release - 2026-10-04
+
+npm run release:check passed: seven runtime tests, build, aligned metadata, LF and package dry run.
+Configured-secret scan found no matches in Git release candidates.
+
+User authorization: update versions and changelogs, then commit and push all workspace repositories.
+Add public provider composition, bounded startup and shutdown, request cancellation, safe HTTP contracts and runtime regression checks.
+Authenticated MCP connection passed for this owner before release work.
+This delivery covers GitHub source. Npm publication, production deployment and real email acceptance remain separate gates.
