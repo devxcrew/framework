@@ -27,8 +27,7 @@ Production deployment and real SMTP acceptance remain deferred. No pending exter
 
 Master: [all foundation tasks](D:/codexsun/projects/cxsun/agent/CHECKLIST.md).
 
-Updated: 2026-10-04. Checked steps have recorded local evidence.
-Parents retain incomplete acceptance gates. Mail tests and production deployment are deferred by user.
+Updated: 2026-10-04. Checked steps have recorded evidence. External acceptance stays pending.
 
 ### Phase 01 - Baseline and ownership
 
@@ -37,7 +36,7 @@ Parents retain incomplete acceptance gates. Mail tests and production deployment
 
 ### Phase 02 - Public contracts and release scope
 
-- [ ] **02.01 Define runtime and transport public contracts** - in-review. Owner: framework.
+- [x] **02.01 Define runtime and transport public contracts** - accepted. Owner: framework.
   - [x] 02.01.1 Provider composition, context, errors and parsing implemented.
   - [x] 02.01.2 Startup timeout contract and compatibility notes verified locally.
 
@@ -47,9 +46,9 @@ Parents retain incomplete acceptance gates. Mail tests and production deployment
   - [x] 03.01.1 Seven runtime tests cover safe errors, readiness and deadlines.
   - [x] 03.01.2 Startup deadline, cancellation and failed-start cleanup verified locally.
   - [ ] 03.01.4 Production proxy/security and failure operations - deferred by user.
-- [ ] **03.02 Refine cancellation and concurrency primitives** - in-review. Owner: framework.
+- [x] **03.02 Refine cancellation and concurrency primitives** - accepted. Owner: framework.
   - [x] 03.02.1 Request cancellation and bounded lifecycle behavior tested.
-  - [x] 03.02.2 Accept documented consumer transaction, idempotency and cancellation responsibilities.
+  - [x] 03.02.2 Accept consumer transaction, idempotency and cancellation responsibilities.
 - [x] **03.03 Provide transport for accepted asynchronous needs** - accepted for current local scope. Owner: framework.
   - [x] 03.03.1 Synchronous ownership retained where no asynchronous consumer is required.
   - [x] 03.03.2 No current consumer requires asynchronous transport. Explicit not-required decision recorded.
@@ -59,7 +58,7 @@ Parents retain incomplete acceptance gates. Mail tests and production deployment
 - [ ] **06.01 Verify runtime consumers and performance** - in-review. Owner: framework.
   - [x] 06.01.1 Seven HTTP/lifecycle tests and Cxsun integration checks pass.
   - [x] 06.01.2 Startup fault and 30-second default lifecycle budget verified.
-  - [ ] 06.01.4 Independent registry consumer - coordinated release gate.
+  - [x] 06.01.4 Independent registry consumer - coordinated release gate.
   - [ ] 06.01.5 Production performance and proxy operations - deferred by user.
 
 <!-- foundation-checklist:end -->
@@ -183,3 +182,8 @@ Release title: Deliver shared runtime foundation.
 Add public provider composition, bounded startup and shutdown, request cancellation, safe HTTP contracts and runtime regression checks.
 Update version records, review release checks, then commit and push the current owner branch.
 Preserve existing task history and incomplete acceptance gates.
+
+
+## Registry consumer acceptance - 2026-10-04
+
+Two independent generated apps passed exact registry installation, application verification, module boundaries and live SQLite checks. Cross-app session denial passed. Cxsun three-OS CI passed in run 37204145628. See projects/cxsun/agent/GENERATED-CONSUMERS.json and RELEASE-PACKAGES.json. Browser acceptance and future version upgrade rehearsal remain separate.
