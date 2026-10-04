@@ -177,3 +177,6 @@ This delivery covers GitHub source. Npm publication, production deployment and r
 
 npm run release:check passed seven runtime tests, build, LF/version checks and a 13-file MIT package.
 Authenticated MCP passed before work. New or expanded three-OS CI requires actual remote run evidence. Npm publication and deployed acceptance remain open.
+
+
+Three-OS source CI passed: GitHub Actions run 37202026913 on Node 26.10.0 and npm 12.2.0.

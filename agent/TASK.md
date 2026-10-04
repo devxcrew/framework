@@ -2,6 +2,8 @@
 
 ## Completion wave - 2026-10-04
 
+- [x] Publish the approved MIT package 0.1.8 and verify its registry checksum against the prepared archive.
+
 Source 0.1.8 includes bounded startup, cancellation, cleanup and seven runtime tests. Earlier no-test and no-deadline statements are historical. This wave documents module-owned transaction and retry responsibilities and adds three-OS CI.
 
 - [x] Reconcile current status with the GitHub source release and latest owner audit.
@@ -11,7 +13,7 @@ Source 0.1.8 includes bounded startup, cancellation, cleanup and seven runtime t
 
 npm run release:check passed seven runtime tests, build, LF/version checks and a 13-file MIT package.
 - [x] Prepare isolated CI coverage for the target Windows/Linux/macOS runtime.
-- [ ] Verify this wave's exact GitHub CI results.
+- [x] Verify Windows/Linux/macOS CI: run 37202026913.
 
 
 Use projects/cxsun/agent/REMAINING-WORK.md for ordered cross-owner dependencies.
@@ -47,7 +49,7 @@ Parents retain incomplete acceptance gates. Mail tests and production deployment
   - [ ] 03.01.4 Production proxy/security and failure operations - deferred by user.
 - [ ] **03.02 Refine cancellation and concurrency primitives** - in-review. Owner: framework.
   - [x] 03.02.1 Request cancellation and bounded lifecycle behavior tested.
-  - [ ] 03.02.2 Accept consumer transaction, idempotency and cancellation responsibilities.
+  - [x] 03.02.2 Accept documented consumer transaction, idempotency and cancellation responsibilities.
 - [x] **03.03 Provide transport for accepted asynchronous needs** - accepted for current local scope. Owner: framework.
   - [x] 03.03.1 Synchronous ownership retained where no asynchronous consumer is required.
   - [x] 03.03.2 No current consumer requires asynchronous transport. Explicit not-required decision recorded.
