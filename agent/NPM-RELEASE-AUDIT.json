@@ -4,7 +4,7 @@
   "sourceVersion": "0.1.12",
   "tests": 62,
   "releaseChecks": "passed",
-  "registryStatus": "publication-in-progress",
+  "registryStatus": "latest-and-checksum-verified",
   "deferred": [
     "production deployment",
     "real SMTP delivery"
@@ -13,5 +13,29 @@
     "filename": "devxcrew-framework-0.1.12.tgz",
     "shasum": "844b7c6a69caa33524b348e36a4b860e094343b7",
     "integrity": "sha512-M0MBWOE0IwHX5eYJ43Vr+ncdrllsxPhS9W6CWnGxjOsEh8P2z30UNib8vod2PLS46YVmP7a0Q+OSLhzvN/mONg=="
+  },
+  "registry": {
+    "version": "0.1.12",
+    "dist.shasum": "844b7c6a69caa33524b348e36a4b860e094343b7",
+    "dist.integrity": "sha512-M0MBWOE0IwHX5eYJ43Vr+ncdrllsxPhS9W6CWnGxjOsEh8P2z30UNib8vod2PLS46YVmP7a0Q+OSLhzvN/mONg=="
+  },
+  "artifactScope": "No environment files, test files, database files or node_modules",
+  "sourceCi": "passed",
+  "consumer": {
+    "installedVersion": "0.1.12",
+    "registryOnly": true,
+    "publicRuntimeImports": "passed",
+    "typescriptAndUiImports": "passed",
+    "toolsCli": "passed",
+    "sqlitePersistence": "passed in backend consumer",
+    "securityAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "evidence": "shared/tools/.cache-npm-consumer"
   }
 }
