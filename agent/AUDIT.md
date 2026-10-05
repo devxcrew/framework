@@ -8,9 +8,11 @@
 - Passed: six app manifests and lockfiles resolve `@devxcrew/framework@0.1.8` from npm with integrity records.
 - Passed: Cxsun clean registry install and `npm run packages:check`.
 - Partial: two generated registry consumers passed app verification and live SQLite checks. The cross-app isolation probe failed because port 5192 refused a connection.
-- Blocked: npm publication returned `EOTP` and requires an npm one-time code. Version 0.1.9 is not published.
+- Passed: npm browser security-key authentication authorized publication after the initial CLI attempt required a second factor.
 - Passed: source commit `3da2ff4` was pushed to `origin/main`.
-- Open: publish 0.1.9, then verify the registry install and public exports.
+- Passed: `@devxcrew/framework@0.1.9` is published to npm with `latest` pointing to 0.1.9.
+- Passed: a clean registry consumer installed 0.1.9 and imported the main and browser client entry points.
+- Open: no release work remains. The cross-app isolation probe reported above still needs a successful run on a reachable port.
 
 ## Package reference cleanup - 2026-10-05
 

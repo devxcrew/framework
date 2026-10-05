@@ -1,11 +1,11 @@
 # Framework task
 
-## Remaining release work
+## Release 0.1.9 complete
 
-- [ ] Publish `@devxcrew/framework@0.1.9` with npm two-factor authentication.
-- [ ] Install the published package and verify the main and browser client exports.
-
-Source release pushed as `3da2ff4` (`#9 - Add modular runtime services`).
+- Published `@devxcrew/framework@0.1.9` publicly with the `latest` tag.
+- Installed 0.1.9 from npm in a clean consumer and imported both public entry points.
+- `npm run release:check` passed with all 16 tests.
+- Source release pushed as `3da2ff4`; task record update pushed as `9467b47`.
 
 ## Verified before publication
 

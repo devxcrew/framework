@@ -1,4 +1,3 @@
 # Remaining work
 
-- Publish Framework 0.1.9 after npm two-factor authentication.
-- Verify the registry installation and public exports.
+No release work is open. Add shared services when a consumer defines a need and public contract.

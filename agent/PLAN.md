@@ -4,10 +4,9 @@
 
 Framework 0.1.9 adds owner-local validation, structured redacted logging, HTTP security, health checks, and a browser-safe API client.
 
-## Remaining steps
+## Release status
 
-1. Publish 0.1.9 with npm two-factor authentication.
-2. Install 0.1.9 from npm and verify its public entry points.
+Version 0.1.9 is published to npm as `latest`. A clean registry consumer imported both public entry points, and all 16 release checks passed.
 
 ## Future services
 
