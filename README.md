@@ -106,6 +106,29 @@ Receive and header timeouts are configurable positive millisecond values. They d
 `createRequestContext` supplies a server-generated request ID and an abort signal.
 Identity, tenant scope, transactions, and domain rules remain with their owner providers.
 
+## Owner providers
+
+Use `parseWithSchema` or `createValidationProvider().parse` to validate untrusted server input with a Zod schema.
+Validation failures throw `HttpError` with status 422 and safe field messages. Keep schemas and domain rules in the application module.
+
+Use `createLogger` for JSON logs. Set the minimum level and pass a sink for a logging adapter.
+Child loggers keep request context. The logger masks values under secret-like field names, bearer tokens, URL credentials, and common secret query parameters.
+
+Use `createHealthProvider` with named, synchronous dependency checks.
+`isReady()` returns false when any check fails. `snapshot()` reports check names and results. Expose that detail only through an authorized operations route.
+
+`createApplicationServer` applies `X-Content-Type-Options`, `X-Frame-Options`, and `Referrer-Policy` by default.
+Set `security.allowedOrigins` to enable exact-origin CORS. A configured allowlist rejects requests with other Origin values.
+Set `security.headers` for application-specific headers. Configure HSTS only when the public connection uses HTTPS.
+Set `security.trustedProxyAddresses` to exact proxy IP addresses before trusting `X-Forwarded-For`.
+Set `security.rateLimit` to enable an in-memory fixed-window limit by client address. It applies to all requests in one process.
+Use a shared rate-limit service when multiple app processes must share a limit.
+
+Import the browser-safe client from `@devxcrew/framework/client`.
+`createApiClient` accepts a base URL, optional common headers, and an optional Fetch implementation.
+Its `request` method passes cancellation through, returns JSON responses, and throws `ApiClientError` for non-success responses.
+The client reads only the Framework safe error envelope. It does not add authentication or retry mutations.
+
 Provider factories must only compose values. Acquire connections and other resources inside start hooks so failed startup can release them.
 Stop during startup is rejected. Concurrent stop calls share one cleanup operation.
 Oversized streamed JSON is drained without destroying the response socket, allowing a safe 413 response.

@@ -1,10 +1,11 @@
 # Repository skills
 
-Own reusable configuration validation and native HTTP primitives.
+Own reusable configuration validation, module lifecycle, native HTTP, validation, structured logging, health checks, HTTP security, and the browser-safe API client.
 
 ## Shared instructions
 
-Use the existing package scripts and public package exports. MCP Governance provides UI usage, code
+Use the existing package scripts and public package exports. Import the browser client from
+`@devxcrew/framework/client`. MCP Governance provides UI usage, code
 standards, repository workflow, and setup instructions.
 
 Retrieve shared documentation and rules only from `https://mcp.codexsun.com/mcp` using `npm run mcp:connect`.

@@ -1,5 +1,26 @@
 # Verification evidence
 
+## Modular runtime services - 2026-10-05
+
+- Passed: authenticated MCP connection. The advisory deployment snapshot still reports Framework 0.1.7.
+- Passed: `npm run release:check`, including build, 16 tests, version alignment, LF checks, and package dry run.
+- Passed: packed 0.1.9 consumer install and smoke checks for both public entry points.
+- Passed: six app manifests and lockfiles resolve `@devxcrew/framework@0.1.8` from npm with integrity records.
+- Passed: Cxsun clean registry install and `npm run packages:check`.
+- Partial: two generated registry consumers passed app verification and live SQLite checks. The cross-app isolation probe failed because port 5192 refused a connection.
+- Blocked: npm publication returned `EOTP` and requires an npm one-time code. Version 0.1.9 is not published.
+- Open: verify the 0.1.9 registry install, then commit and push the reviewed source release.
+
+## Package reference cleanup - 2026-10-05
+
+- [x] Retrieve authenticated cloud governance.
+- [x] Remove superseded package identifiers from source, fixtures and current documents.
+- [x] Use Framework and UI names consistently.
+- [x] Scan repository files for remaining superseded identifiers.
+
+Static cleanup only. No test suite, publication or deployment ran in this step.
+
+
 ## Verified release evidence - 2026-10-05
 
 Seven runtime tests, build, metadata checks and the 13-file archive passed.
@@ -14,7 +35,7 @@ Browser interaction, SMTP and production acceptance remain separate.
 
 - [x] Authenticated cloud governance and npm account verified.
 - [x] User authorized public MIT publication and existing app migration.
-- [x] Rename @devxcrew/core-framework to @devxcrew/framework 0.1.8, preserving public APIs.
+- [x] Publish @devxcrew/framework 0.1.8, preserving public APIs.
 - [x] Verify the release archive and registry integrity after publication.
 - [x] Verify all six existing apps, the gallery and two fresh registry apps.
 - [x] Commit and push the reviewed release.
@@ -103,7 +124,6 @@ No implementation source, operational data, release version, publication, commit
 
 ## npm migration completion — 2026-10-03
 
-- Passed: @devxcrew/core-framework@0.1.7 and @devxcrew/react-ui@0.1.7 are public in the npm registry.
 - Passed: Cxsun installed both registry packages and records registry URLs and integrity hashes in its lockfile.
 - Passed: UIUX typecheck and production build with the new UI package name. UIUX intentionally keeps its local source gallery dependency.
 - Passed: Governance cloud checks, deployment, and authenticated connections from all six repositories.
@@ -171,7 +191,6 @@ Seven Framework tests and release:check pass. Default startup and shutdown budge
 Start hooks receive an AbortSignal. Owners must release resources after cancellation and avoid late acquisition.
 JavaScript cannot forcibly stop an uncooperative hook or synchronous execution.
 Framework owns runtime deadlines. App owners own process termination policy.
-Proposed next compatible release: @devxcrew/core-framework 0.1.8. The source manifest remains 0.1.7 until coordinated release approval.
 Upgrade: existing one-argument start hooks continue to work. Long startup hooks must explicitly configure the budget.
 No consumer requires a durable queue now. Add module-owned events or queues only when an accepted asynchronous workflow requires them.
 Remaining: independent registry consumer and production proxy/performance operational acceptance.
@@ -199,3 +218,13 @@ Authenticated MCP passed before work. New or expanded three-OS CI requires actua
 
 
 Three-OS source CI passed: GitHub Actions run 37202026913 on Node 26.10.0 and npm 12.2.0.
+
+## Dependency alignment - 2026-10-05
+
+- [x] Align consumed shared packages and common direct dependency versions.
+- [x] Install dependencies with lifecycle scripts disabled.
+- [x] Keep app dependency ownership and public peer ranges.
+- [x] Exclude Veyrezio from this change.
+
+Source version: 0.1.9. Published package archives retain their existing versions.
+The baseline is recorded in projects/cxsun/agent/DEPENDENCY-BASELINE.json.

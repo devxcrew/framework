@@ -1,6 +1,6 @@
 {
   "name": "@devxcrew/framework",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "type": "module",
   "exports": {
     ".": {
@@ -24,7 +24,7 @@
     "url": "git+https://github.com/devxcrew/framework.git"
   },
   "devDependencies": {
-    "@devxcrew/tools": "0.1.7",
+    "@devxcrew/tools": "0.1.8",
     "@types/node": "^26.0.0",
     "typescript": "6.0.3"
   },

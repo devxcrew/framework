@@ -2,14 +2,27 @@ import { createServer, type RequestListener } from "node:http";
 import { readFile, realpath } from "node:fs/promises";
 import { extname, resolve, sep } from "node:path";
 import type { ApplicationConfig } from "../runtime/config.js";
-import { createRequestContext, writeJsonError, HttpError } from "../modules/http/http.provider.js";
+import {
+  createRequestContext,
+  writeJsonError,
+  HttpError,
+} from "../modules/http/http.provider.js";
+import {
+  createHttpSecurityProvider,
+  type HttpSecurityOptions,
+} from "../modules/http/http-security.provider.js";
 
 export interface ApplicationServerOptions {
   config: ApplicationConfig;
   frontendDirectory: string;
   developmentHandler?: RequestListener;
-  apiHandler?: (request: import("node:http").IncomingMessage, response: import("node:http").ServerResponse, context: ReturnType<typeof createRequestContext>) => void | Promise<void>;
+  apiHandler?: (
+    request: import("node:http").IncomingMessage,
+    response: import("node:http").ServerResponse,
+    context: ReturnType<typeof createRequestContext>,
+  ) => void | Promise<void>;
   readiness?: () => boolean;
+  security?: HttpSecurityOptions;
   requestTimeoutMs?: number;
   headersTimeoutMs?: number;
   handlerTimeoutMs?: number;
@@ -27,7 +40,9 @@ const contentTypes: Record<string, string> = {
 
 export function createApplicationServer(options: ApplicationServerOptions) {
   const handlerTimeoutMs = positiveTimeout(options.handlerTimeoutMs ?? 30_000);
+  const security = createHttpSecurityProvider(options.security);
   const server = createServer((request, response) => {
+    if (security.handle(request, response)) return;
     if (options.readiness && request.url === "/health/ready") {
       if (request.method !== "GET" && request.method !== "HEAD") {
         response.writeHead(405, { Allow: "GET, HEAD" });
@@ -35,26 +50,46 @@ export function createApplicationServer(options: ApplicationServerOptions) {
         return;
       }
       let ready = false;
-      try { ready = options.readiness(); }
-      catch { ready = false; }
-      response.writeHead(ready ? 200 : 503, { "Content-Type": "application/json", "Cache-Control": "no-store" });
-      response.end(request.method === "HEAD" ? undefined : JSON.stringify({ ready }));
+      try {
+        ready = options.readiness();
+      } catch {
+        ready = false;
+      }
+      response.writeHead(ready ? 200 : 503, {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store",
+      });
+      response.end(
+        request.method === "HEAD" ? undefined : JSON.stringify({ ready }),
+      );
       return;
     }
     if (options.apiHandler && /^\/api(?:\/|\?|$)/.test(request.url ?? "")) {
-      const context = createRequestContext(request, Date.now() + handlerTimeoutMs);
+      const context = createRequestContext(
+        request,
+        Date.now() + handlerTimeoutMs,
+      );
       const deadline = setTimeout(() => {
-        const error = new HttpError(504, "request_timeout", "Request deadline exceeded.");
+        const error = new HttpError(
+          504,
+          "request_timeout",
+          "Request deadline exceeded.",
+        );
         context.abort(error);
-        if (!response.writableEnded && !response.destroyed) writeJsonError(response, error, context.requestId);
+        if (!response.writableEnded && !response.destroyed)
+          writeJsonError(response, error, context.requestId);
       }, handlerTimeoutMs);
       response.once("finish", () => clearTimeout(deadline));
       response.once("close", () => clearTimeout(deadline));
       response.setHeader("X-Request-ID", context.requestId);
-      response.once("close", () => { if (!response.writableFinished) request.emit("aborted"); });
-      void Promise.resolve().then(() => options.apiHandler!(request, response, context))
+      response.once("close", () => {
+        if (!response.writableFinished) request.emit("aborted");
+      });
+      void Promise.resolve()
+        .then(() => options.apiHandler!(request, response, context))
         .catch((error) => {
-          if (!response.writableEnded && !response.destroyed) writeJsonError(response, error, context.requestId);
+          if (!response.writableEnded && !response.destroyed)
+            writeJsonError(response, error, context.requestId);
         });
       return;
     }
@@ -73,7 +108,8 @@ export function createApplicationServer(options: ApplicationServerOptions) {
 }
 
 function positiveTimeout(value: number) {
-  if (!Number.isSafeInteger(value) || value < 1) throw new Error("Invalid HTTP timeout.");
+  if (!Number.isSafeInteger(value) || value < 1)
+    throw new Error("Invalid HTTP timeout.");
   return value;
 }
 
@@ -115,8 +151,14 @@ async function serveFrontend(
   }
   const target = extname(pathname) ? file : resolve(root, "index.html");
   try {
-    const [actualRoot, actualTarget] = await Promise.all([realpath(root), realpath(target)]);
-    if (actualTarget !== actualRoot && !actualTarget.startsWith(`${actualRoot}${sep}`)) {
+    const [actualRoot, actualTarget] = await Promise.all([
+      realpath(root),
+      realpath(target),
+    ]);
+    if (
+      actualTarget !== actualRoot &&
+      !actualTarget.startsWith(`${actualRoot}${sep}`)
+    ) {
       response.writeHead(403);
       response.end("Forbidden");
       return;

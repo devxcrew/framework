@@ -1,4 +1,5 @@
 # Remaining work
 
-- Finish validation of the current local governance documentation changes.
-- Commit and push only when requested.
+- Publish Framework 0.1.9 after npm two-factor authentication.
+- Verify the registry installation and public exports.
+- Commit and push the reviewed release.
