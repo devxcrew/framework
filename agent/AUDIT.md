@@ -1,5 +1,13 @@
 # Verification evidence
 
+## Framework gap review - 2026-10-05
+
+- Passed: authenticated `npm run mcp:connect` and reviewed the live code standard. Its advisory deployment snapshot still reports Framework 0.1.7.
+- Reviewed: Framework 0.1.9 exports, HTTP server, owner providers, README, and release records.
+- Found: the current 422 error envelope differs from the live resource API rule. Routing uses one app-wide handler, and provider injection relies on string names and `unknown` values. The README has old setup advice.
+- Partial: the prior cross-app isolation probe failed to connect to port 5192. It was not rerun for this plan.
+- Untested: this review changed planning records only. No runtime tests or release commands ran.
+
 ## Modular runtime services - 2026-10-05
 
 - Passed: authenticated MCP connection. The advisory deployment snapshot still reports Framework 0.1.7.

@@ -1,19 +1,12 @@
 # Framework task
 
-## Release 0.1.9 complete
+## Current task
 
-- Published `@devxcrew/framework@0.1.9` publicly with the `latest` tag.
-- Installed 0.1.9 from npm in a clean consumer and imported both public entry points.
-- `npm run release:check` passed with all 16 tests.
-- Source release pushed as `3da2ff4`; task record update pushed as `9467b47`.
+Review Framework 0.1.9 and record the next work in `agent/PLAN.md`.
 
-## Verified before publication
+## Evidence
 
-- `npm run release:check` passed with 16 tests.
-- A clean temporary consumer installed the packed package and imported both public entry points.
-- Six existing app manifests and lockfiles use the renamed `@devxcrew/framework@0.1.8` registry package.
-- Cxsun package checks passed. Two generated registry consumers passed app verification and live SQLite checks.
-
-## Scope
-
-Keep optional services out until a consumer defines a need and public contract.
+- Authenticated `npm run mcp:connect` passed. Its deployment snapshot still reports the old 0.1.7 package.
+- Reviewed the current public exports, runtime modules, HTTP server, README, and prior release evidence.
+- Compared module scope with the official NestJS and Fastify guides.
+- This task changes planning records only. No runtime tests or release commands ran.
