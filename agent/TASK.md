@@ -9,9 +9,9 @@
 - [x] Update the consumer README and keep prior error responses readable during migration.
 - [x] Run authenticated governance connection and the Framework test suite.
 - [x] Verify a clean npm consumer for 0.1.10 and compile the corrected README example.
-- [ ] Verify a clean npm consumer for 0.1.11.
+- [x] Verify a clean npm consumer for 0.1.11, including TypeScript compilation.
 - [ ] Run the Cxsun isolation probe after its app-owned release fixture adopts 0.1.11.
-- [ ] Complete source commit, push, and npm publication.
+- [x] Complete source commit, push, and npm publication to `latest`.
 
 ## App acceptance
 

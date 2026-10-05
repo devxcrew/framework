@@ -256,3 +256,6 @@ The baseline is recorded in projects/cxsun/agent/DEPENDENCY-BASELINE.json.
 - Adding an explicit return type to that example passed TypeScript 6 in the clean consumer.
 - 0.1.11 `npm run release:check` passed with 25 tests, build, metadata, LF, and package dry run.
 - The Cxsun registry fixture still pins Framework 0.1.8. It cannot prove app isolation on this release without an app-owned upgrade.
+- 0.1.11 source commit `63b8a49` was pushed; [Framework checks](https://github.com/devxcrew/framework/actions/runs/37265413148) passed.
+- npm accepted 0.1.11 with `latest`. Registry SHA-1 `4114200aed1c7738c1759b870964275f5059ef34` matches the packed archive.
+- A new registry consumer installed 0.1.11. Runtime imports and the README example under TypeScript 6 passed.
