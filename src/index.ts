@@ -5,10 +5,15 @@ export {
 export {
   createApplicationServer,
   type ApplicationServerOptions,
+  type RequestCompletion,
 } from "./http/server.js";
 export {
   composeModules,
+  createModuleToken,
+  defineModuleProvider,
   type ModuleProvider,
+  type ModuleToken,
+  type TypedModuleDefinition,
 } from "./modules/runtime/runtime.provider.js";
 export {
   HttpError,
@@ -16,6 +21,10 @@ export {
   writeJsonError,
   parseListQuery,
   readJsonBody,
+  createApiRouter,
+  type ApiMethod,
+  type ApiRoute,
+  type ApiRouteProvider,
 } from "./modules/http/http.provider.js";
 export {
   createValidationProvider,
@@ -35,10 +44,14 @@ export {
   type HttpSecurityOptions,
   type HttpSecurityProvider,
   type RateLimitOptions,
+  type RateLimitStore,
 } from "./modules/http/http-security.provider.js";
 export {
   createHealthProvider,
+  createAsyncHealthProvider,
   type HealthCheck,
   type HealthProvider,
   type HealthSnapshot,
+  type AsyncHealthCheck,
+  type AsyncHealthProvider,
 } from "./modules/health/health.provider.js";

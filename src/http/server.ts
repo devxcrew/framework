@@ -11,6 +11,16 @@ import {
   createHttpSecurityProvider,
   type HttpSecurityOptions,
 } from "../modules/http/http-security.provider.js";
+import type { Logger } from "../modules/logger/logger.provider.js";
+
+export interface RequestCompletion {
+  requestId: string;
+  method: string;
+  path: string;
+  statusCode: number;
+  durationMs: number;
+  aborted: boolean;
+}
 
 export interface ApplicationServerOptions {
   config: ApplicationConfig;
@@ -21,8 +31,11 @@ export interface ApplicationServerOptions {
     response: import("node:http").ServerResponse,
     context: ReturnType<typeof createRequestContext>,
   ) => void | Promise<void>;
-  readiness?: () => boolean;
+  readiness?: () => boolean | Promise<boolean>;
+  readinessTimeoutMs?: number;
   security?: HttpSecurityOptions;
+  logger?: Logger;
+  onRequestComplete?: (event: RequestCompletion) => void;
   requestTimeoutMs?: number;
   headersTimeoutMs?: number;
   handlerTimeoutMs?: number;
@@ -40,71 +53,182 @@ const contentTypes: Record<string, string> = {
 
 export function createApplicationServer(options: ApplicationServerOptions) {
   const handlerTimeoutMs = positiveTimeout(options.handlerTimeoutMs ?? 30_000);
+  const readinessTimeoutMs = positiveTimeout(
+    options.readinessTimeoutMs ?? 2_000,
+  );
   const security = createHttpSecurityProvider(options.security);
   const server = createServer((request, response) => {
-    if (security.handle(request, response)) return;
-    if (options.readiness && request.url === "/health/ready") {
-      if (request.method !== "GET" && request.method !== "HEAD") {
-        response.writeHead(405, { Allow: "GET, HEAD" });
-        response.end();
-        return;
-      }
-      let ready = false;
-      try {
-        ready = options.readiness();
-      } catch {
-        ready = false;
-      }
-      response.writeHead(ready ? 200 : 503, {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-store",
-      });
-      response.end(
-        request.method === "HEAD" ? undefined : JSON.stringify({ ready }),
-      );
-      return;
-    }
-    if (options.apiHandler && /^\/api(?:\/|\?|$)/.test(request.url ?? "")) {
-      const context = createRequestContext(
-        request,
-        Date.now() + handlerTimeoutMs,
-      );
-      const deadline = setTimeout(() => {
-        const error = new HttpError(
-          504,
-          "request_timeout",
-          "Request deadline exceeded.",
-        );
-        context.abort(error);
+    const isApi = /^\/api(?:\/|\?|$)/.test(request.url ?? "");
+    const context = createRequestContext(request);
+    response.setHeader("X-Request-ID", context.requestId);
+    reportRequest(request, response, context.requestId, options);
+    void security
+      .handleAsync(request, response)
+      .then((handled) => {
+        if (!handled && !response.destroyed)
+          serveRequest(
+            request,
+            response,
+            context,
+            isApi,
+            options,
+            handlerTimeoutMs,
+            readinessTimeoutMs,
+          );
+      })
+      .catch(() => {
         if (!response.writableEnded && !response.destroyed)
-          writeJsonError(response, error, context.requestId);
-      }, handlerTimeoutMs);
-      response.once("finish", () => clearTimeout(deadline));
-      response.once("close", () => clearTimeout(deadline));
-      response.setHeader("X-Request-ID", context.requestId);
-      response.once("close", () => {
-        if (!response.writableFinished) request.emit("aborted");
+          writeJsonError(
+            response,
+            new HttpError(
+              503,
+              "security_unavailable",
+              "Request checks are unavailable.",
+            ),
+            context.requestId,
+          );
       });
-      void Promise.resolve()
-        .then(() => options.apiHandler!(request, response, context))
-        .catch((error) => {
-          if (!response.writableEnded && !response.destroyed)
-            writeJsonError(response, error, context.requestId);
-        });
-      return;
-    }
-    if (options.developmentHandler)
-      return options.developmentHandler(request, response);
-    void serveFrontend(
-      options.frontendDirectory,
-      request.url || "/",
-      request.method || "GET",
-      response,
-    );
   });
   server.requestTimeout = positiveTimeout(options.requestTimeoutMs ?? 30_000);
   server.headersTimeout = positiveTimeout(options.headersTimeoutMs ?? 10_000);
   return server;
+}
+
+function serveRequest(
+  request: import("node:http").IncomingMessage,
+  response: import("node:http").ServerResponse,
+  context: ReturnType<typeof createRequestContext>,
+  isApi: boolean,
+  options: ApplicationServerOptions,
+  handlerTimeoutMs: number,
+  readinessTimeoutMs: number,
+) {
+  if (options.readiness && request.url === "/health/ready") {
+    void serveReadiness(
+      request,
+      response,
+      options.readiness,
+      readinessTimeoutMs,
+    );
+    return;
+  }
+  if (options.apiHandler && isApi) {
+    context.deadlineAt = Date.now() + handlerTimeoutMs;
+    const deadline = setTimeout(() => {
+      const error = new HttpError(
+        504,
+        "request_timeout",
+        "Request deadline exceeded.",
+      );
+      context.abort(error);
+      if (!response.writableEnded && !response.destroyed)
+        writeJsonError(response, error, context.requestId);
+    }, handlerTimeoutMs);
+    response.once("finish", () => clearTimeout(deadline));
+    response.once("close", () => clearTimeout(deadline));
+    response.once("close", () => {
+      if (!response.writableFinished) request.emit("aborted");
+    });
+    void Promise.resolve()
+      .then(() => options.apiHandler!(request, response, context))
+      .catch((error) => {
+        if (!response.writableEnded && !response.destroyed)
+          writeJsonError(response, error, context.requestId);
+      });
+    return;
+  }
+  if (options.developmentHandler) {
+    options.developmentHandler(request, response);
+    return;
+  }
+  void serveFrontend(
+    options.frontendDirectory,
+    request.url || "/",
+    request.method || "GET",
+    response,
+  );
+}
+
+async function serveReadiness(
+  request: import("node:http").IncomingMessage,
+  response: import("node:http").ServerResponse,
+  readiness: () => boolean | Promise<boolean>,
+  timeoutMs: number,
+) {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    response.writeHead(405, { Allow: "GET, HEAD" });
+    response.end();
+    return;
+  }
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  let ready = false;
+  try {
+    ready = await Promise.race([
+      Promise.resolve().then(readiness),
+      new Promise<false>((resolve) => {
+        timer = setTimeout(() => resolve(false), timeoutMs);
+      }),
+    ]);
+  } catch {
+    ready = false;
+  } finally {
+    clearTimeout(timer);
+  }
+  if (response.destroyed) return;
+  response.writeHead(ready ? 200 : 503, {
+    "Content-Type": "application/json",
+    "Cache-Control": "no-store",
+  });
+  response.end(
+    request.method === "HEAD" ? undefined : JSON.stringify({ ready }),
+  );
+}
+
+function reportRequest(
+  request: import("node:http").IncomingMessage,
+  response: import("node:http").ServerResponse,
+  requestId: string,
+  options: ApplicationServerOptions,
+) {
+  if (!options.logger && !options.onRequestComplete) return;
+  const startedAt = Date.now();
+  let reported = false;
+  const report = () => {
+    if (reported) return;
+    reported = true;
+    const event: RequestCompletion = {
+      requestId,
+      method: request.method ?? "GET",
+      path: safePath(request.url),
+      statusCode: response.statusCode,
+      durationMs: Date.now() - startedAt,
+      aborted: !response.writableFinished,
+    };
+    try {
+      options.onRequestComplete?.(event);
+    } catch {
+      /* A diagnostics sink must not affect the response. */
+    }
+    if (options.logger) {
+      const level =
+        event.aborted || event.statusCode >= 500
+          ? "error"
+          : event.statusCode >= 400
+            ? "warn"
+            : "info";
+      options.logger[level]("HTTP request completed", { ...event });
+    }
+  };
+  response.once("finish", report);
+  response.once("close", report);
+}
+
+function safePath(url: string | undefined) {
+  try {
+    return new URL(url ?? "/", "http://localhost").pathname;
+  } catch {
+    return "/";
+  }
 }
 
 function positiveTimeout(value: number) {

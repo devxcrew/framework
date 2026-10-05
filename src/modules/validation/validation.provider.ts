@@ -25,7 +25,7 @@ export function parseWithSchema<T extends z.ZodType>(
     throw new HttpError(
       422,
       "validation_failed",
-      "The submitted data is invalid.",
+      "Validation failed",
       Object.fromEntries(Object.entries(fields)),
     );
   }

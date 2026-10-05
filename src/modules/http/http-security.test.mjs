@@ -79,3 +79,67 @@ test("HTTP security bounds requests per client", async (t) => {
   assert.equal(blocked.status, 429);
   assert.ok(Number(blocked.headers.get("retry-after")) > 0);
 });
+
+test("two server instances use one shared rate limit store", async (t) => {
+  const counts = new Map();
+  const store = {
+    async consume(address, limit) {
+      const count = (counts.get(address) ?? 0) + 1;
+      counts.set(address, count);
+      return count > limit ? 60 : 0;
+    },
+  };
+  const makeServer = () =>
+    createApplicationServer({
+      config: {},
+      frontendDirectory: ".",
+      security: { rateLimit: { limit: 1, windowMs: 60_000, store } },
+      apiHandler(_request, response) {
+        response.end("ok");
+      },
+    });
+  const first = makeServer();
+  const second = makeServer();
+  await Promise.all([
+    new Promise((resolve) => first.listen(0, "127.0.0.1", resolve)),
+    new Promise((resolve) => second.listen(0, "127.0.0.1", resolve)),
+  ]);
+  t.after(() =>
+    Promise.all([
+      new Promise((resolve) => first.close(resolve)),
+      new Promise((resolve) => second.close(resolve)),
+    ]),
+  );
+  const firstUrl = `http://127.0.0.1:${first.address().port}/api/status`;
+  const secondUrl = `http://127.0.0.1:${second.address().port}/api/status`;
+  assert.equal((await fetch(firstUrl)).status, 200);
+  const denied = await fetch(secondUrl);
+  assert.equal(denied.status, 429);
+  assert.equal(denied.headers.get("retry-after"), "60");
+});
+
+test("an unavailable shared rate limit store fails safely", async (t) => {
+  const server = createApplicationServer({
+    config: {},
+    frontendDirectory: ".",
+    security: {
+      rateLimit: {
+        limit: 1,
+        windowMs: 60_000,
+        storeTimeoutMs: 20,
+        store: { consume: () => new Promise(() => {}) },
+      },
+    },
+    apiHandler() {
+      assert.fail("The handler must not run without a rate limit decision.");
+    },
+  });
+  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
+  t.after(() => new Promise((resolve) => server.close(resolve)));
+  const response = await fetch(
+    `http://127.0.0.1:${server.address().port}/api/status`,
+  );
+  assert.equal(response.status, 503);
+  assert.equal((await response.json()).error.code, "security_unavailable");
+  assert.equal(response.headers.get("x-content-type-options"), "nosniff");
+});

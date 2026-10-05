@@ -1,12 +1,19 @@
 # Framework task
 
-## Current task
+## Release 0.1.10
 
-Review Framework 0.1.9 and record the next work in `agent/PLAN.md`.
+- [x] Align server validation errors with the shared `message` and `errors` shape.
+- [x] Add module-owned `/api/v1` route registration and resource response examples.
+- [x] Add typed public provider tokens and contract injection.
+- [x] Add request diagnostics, bounded asynchronous health checks, and a shared rate limit store contract.
+- [x] Update the consumer README and keep prior error responses readable during migration.
+- [x] Run authenticated governance connection and the Framework test suite.
+- [ ] Verify a clean npm consumer and the Cxsun isolation probe.
+- [ ] Complete source commit, push, and npm publication.
 
-## Evidence
+## App acceptance
 
-- Authenticated `npm run mcp:connect` passed. Its deployment snapshot still reports the old 0.1.7 package.
-- Reviewed the current public exports, runtime modules, HTTP server, README, and prior release evidence.
-- Compared module scope with the official NestJS and Fastify guides.
-- This task changes planning records only. No runtime tests or release commands ran.
+- [ ] Verify proxy forwarding and TLS in a deployed app.
+- [ ] Measure representative response times and set app budgets.
+
+Production acceptance requires a deployed app; local Framework tests cannot establish it.

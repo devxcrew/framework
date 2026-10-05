@@ -1,162 +1,92 @@
-# framework
+# @devxcrew/framework
 
-Own reusable configuration validation and native HTTP primitives.
+Shared Node and TypeScript runtime for Codexsun apps. It provides module lifecycle, HTTP, validation, logging, health, security, and a browser API client. Business rules stay in each app module. Platform Core owns identity, roles, and tenancy.
 
-Use the sibling workspace layout. Shared framework and UI keep their existing public exports and
-build contracts.
+## Install
 
-## Run
-
-Use Node 26.10 or newer and the package manifest requirements. Clone the sibling tools and
-mcp-governance repositories along with this repository.
+Use Node 26.10 or newer.
 
 ```powershell
-npm install
-npm run check
+npm install @devxcrew/framework
 ```
 
-Cxsun runs npm run build:framework using its compiler to build this package.
+Import server exports from `@devxcrew/framework`. Import the browser client from `@devxcrew/framework/client`.
 
-## Repository records
+## Owner modules and routes
 
-- `AGENTS.md`: repository instructions and ownership rules.
-- `agent/SKILLS.md`: repository capabilities.
-- `agent/TASK.md`: current task and status.
-- `agent/PLAN.md`: next steps.
-- `agent/CHANGELOG.md`: versioned changes and validation results.
+Each app module exposes a public provider contract. The app composition root connects providers and passes their routes to `createApiRouter`. Keep Zod schemas, controllers, services, and persistence inside the owner module.
 
-## Shared guidance
+```ts
+import {
+  composeModules,
+  createApiRouter,
+  createApplicationServer,
+  createModuleToken,
+  defineModuleProvider,
+  type ApiRoute,
+} from "@devxcrew/framework";
 
-Retrieve shared documentation and rules only from `https://mcp.codexsun.com/mcp` using `npm run mcp:connect`.
-A successful authenticated connection is required before repository work. Stop and report connection failures.
-Do not use local guides or cached instructions as fallback. Instruction retrieval does not authorize actions.
+const statusToken = createModuleToken<{ routes: ApiRoute[] }>("status");
+const status = defineModuleProvider({
+  token: statusToken,
+  dependencies: [],
+  create: () => ({
+    routes: [
+      {
+        method: "GET",
+        path: "/api/v1/status",
+        handler(_request, response) {
+          response.setHeader("Content-Type", "application/json");
+          response.end(JSON.stringify({ data: { ready: true } }));
+        },
+      },
+    ],
+  }),
+});
 
-Retrieve shared documentation and rules only from `https://mcp.codexsun.com/mcp` using `npm run mcp:connect`.
-A successful authenticated connection is required before repository work. Stop and report connection failures.
-Do not use local guides or cached instructions as fallback. Instruction retrieval does not authorize actions.
+const modules = composeModules([status]);
+await modules.start();
+const server = createApplicationServer({
+  config: {
+    name: "example",
+    port: 3000,
+    url: "http://localhost:3000",
+    host: "localhost",
+    mode: "development",
+  },
+  frontendDirectory: "dist/web",
+  apiHandler: createApiRouter([modules.get(statusToken)]),
+});
+server.listen(3000);
+```
 
-Configure these values with `.env.example`:
+`createApiRouter` matches methods and paths. Static paths take priority over `:id` paths. Owners validate route IDs, query strings, and JSON bodies. The router does not implement CRUD or business rules.
 
-- `MCP_SERVER_URL`
-- `MCP_SERVER_SECRET`
-- `APP_ID`
-- `APP_USER`
+`composeModules` also supports the older string-based `ModuleProvider` contract. New modules can use tokens for typed dependencies and runtime token checks.
 
-Keep the secret in ignored `.env` files.
+## HTTP and validation
+
+- `readJsonBody` limits bytes and returns `unknown`. Validate it with an owner Zod schema through `parseWithSchema`.
+- Validation failures return HTTP 422 with `message` and `errors`. The older `error.fields` shape remains during migration.
+- `parseListQuery` checks page size and allowed sort fields. Owner schemas check business filters.
+- Owners return resource data as `{ data }` and lists as `{ data, meta, links }`.
+- `createApiClient` reads JSON responses and safe field errors. It does not add authentication or retry writes.
+
+## Operations
+
+- `createApplicationServer` sets basic security headers. Configure exact CORS origins, trusted proxy addresses, and rate limits for each app.
+- The built-in rate limiter is local to one process. Set `rateLimit.store` to an app-owned atomic shared store when deployment uses multiple instances. Store failures return 503.
+- Set `logger` for request logs. Set `onRequestComplete` to pass request data to a metrics or tracing adapter. Neither receives URL query values.
+- Set `readiness` to a sync or async check. The server bounds it with `readinessTimeoutMs`. `createAsyncHealthProvider` bounds named async dependency checks.
+- API handlers and module start and stop hooks have configurable deadlines. Owners must honor cancellation and release resources.
+
+## Work on this repository
+
+Connect to live governance before repository work. Stop if the authenticated connection fails. Do not use local or cached guidance as a fallback.
 
 ```powershell
 npm run mcp:connect
-npm run mcp:verify
+npm run release:check
 ```
 
-Use `mcp:connect` to retrieve instructions. Use `mcp:verify` for a strict connection test.
-Connection failures do not block application work. Editor registration uses the central connection
-template and depends on the editor.
-
-## Maintenance
-
-```powershell
-npm run version-bump -- --dry-run
-npm run version-bump -- --title "Release title" --note "Change details"
-npm run check:versions
-npm run fix:line-endings
-npm run lines:check
-npm run github:now -- --dry-run
-```
-
-Version bumps align `package.json`, `package-lock.json`, and `agent/CHANGELOG.md`. Record changes
-and validation before committing.
-
-Commit subjects use `#<patch> - <release title>`. For example:
-`#5 - Central governance and repository agent layout`.
-
-Review the changed files before an authorized `npm run github:now`. Do not bump again when the
-release version is already prepared.
-
-## Tools source and publication
-
-Workspace maintenance delegates to `shared/tools`. The installed npm package remains pinned at
-`0.1.3` until agent changelog support is published.
-
-GitHub source releases use `github:now`. Npm publication requires separate authorization.
-
-## npm package
-
-Framework publishes compiled ESM JavaScript and TypeScript declarations. Run npm run build before local development consumption.
-
-Run `npm run release:check`, then `npm publish --access public` from this repository.
-Only public exports are supported. App manifests use npm versions.
-
-## Public runtime contracts
-
-`composeModules` registers owner providers in dependency order. Factories receive only their declared dependencies.
-`start` runs lifecycle hooks. Failed startup calls stop hooks in reverse order, including the failed module.
-`stop` attempts every cleanup hook and reports cleanup failures together.
-
-`createApplicationServer` keeps the existing static and development behavior.
-Optional `apiHandler` receives the request, response, and request context for `/api` paths.
-The handler owns routing and independent Zod validation before service execution.
-Unexpected handler failures return a safe JSON error with a generated request ID.
-Optional `readiness` exposes `/health/ready`. Readiness reports the consumer's actual dependency state.
-Receive and header timeouts are configurable positive millisecond values. They do not bound handler execution.
-
-`readJsonBody` checks content type and limits bytes. Its result is unknown until the owner validates it.
-`parseListQuery` validates pagination and allowlisted sort fields. Owners validate domain filters independently.
-`HttpError` carries safe transport errors and optional field messages. Do not place secrets in these messages.
-`createRequestContext` supplies a server-generated request ID and an abort signal.
-Identity, tenant scope, transactions, and domain rules remain with their owner providers.
-
-## Owner providers
-
-Use `parseWithSchema` or `createValidationProvider().parse` to validate untrusted server input with a Zod schema.
-Validation failures throw `HttpError` with status 422 and safe field messages. Keep schemas and domain rules in the application module.
-
-Use `createLogger` for JSON logs. Set the minimum level and pass a sink for a logging adapter.
-Child loggers keep request context. The logger masks values under secret-like field names, bearer tokens, URL credentials, and common secret query parameters.
-
-Use `createHealthProvider` with named, synchronous dependency checks.
-`isReady()` returns false when any check fails. `snapshot()` reports check names and results. Expose that detail only through an authorized operations route.
-
-`createApplicationServer` applies `X-Content-Type-Options`, `X-Frame-Options`, and `Referrer-Policy` by default.
-Set `security.allowedOrigins` to enable exact-origin CORS. A configured allowlist rejects requests with other Origin values.
-Set `security.headers` for application-specific headers. Configure HSTS only when the public connection uses HTTPS.
-Set `security.trustedProxyAddresses` to exact proxy IP addresses before trusting `X-Forwarded-For`.
-Set `security.rateLimit` to enable an in-memory fixed-window limit by client address. It applies to all requests in one process.
-Use a shared rate-limit service when multiple app processes must share a limit.
-
-Import the browser-safe client from `@devxcrew/framework/client`.
-`createApiClient` accepts a base URL, optional common headers, and an optional Fetch implementation.
-Its `request` method passes cancellation through, returns JSON responses, and throws `ApiClientError` for non-success responses.
-The client reads only the Framework safe error envelope. It does not add authentication or retry mutations.
-
-Provider factories must only compose values. Acquire connections and other resources inside start hooks so failed startup can release them.
-Stop during startup is rejected. Concurrent stop calls share one cleanup operation.
-Oversized streamed JSON is drained without destroying the response socket, allowing a safe 413 response.
-
-## Handler and shutdown deadlines
-
-Set `handlerTimeoutMs` on `createApplicationServer` to bound API response time. The default is 30000 milliseconds.
-Request contexts expose `deadlineAt` and `signal`. At the deadline, the server aborts the signal.
-It returns a safe 504 before response headers or destroys an incomplete streamed response.
-Handlers must honor cancellation and check response state before writing late results.
-A deadline cannot stop synchronous JavaScript or forcibly cancel an uncooperative dependency.
-
-Set `shutdownTimeoutMs` in the second argument of `composeModules`. The default total budget is 30000 milliseconds.
-Stop attempts every hook in reverse dependency order. The budget bounds awaited asynchronous cleanup.
-A timed-out hook can continue running. State becomes `failed`, and stop rejects with cleanup failures.
-Consumers must report failed cleanup and apply their process termination policy.
-
-## Startup deadline
-
-Set startupTimeoutMs in composeModules options. The default total startup budget is 30000 milliseconds.
-Start hooks receive the owner provider and an AbortSignal. Timeout aborts the signal and rolls back started modules.
-An uncooperative hook can continue. Owners must honor cancellation before acquiring or retaining resources.
-
-## Consumer transaction and cancellation contract
-
-Framework owns request deadlines and cancellation signals. The module that owns a mutation owns its database transaction.
-A module validates authorization and input before persistence. It checks cancellation before a write and before committing.
-Cancellation after a successful commit does not roll back committed data. A client must reload before retrying an uncertain mutation.
-Existing identity updates use expectedVersion for stale-write detection. Token completion uses a single database claim.
-Do not retry POST mutations automatically. Add an idempotency key only when a real consumer requires repeatable retries.
-Synchronous identity operations need no generic event bus or queue. External delivery stays outside a database transaction.
+Keep secrets in ignored environment files. Commit and publish through the repository release workflow only when authorized.

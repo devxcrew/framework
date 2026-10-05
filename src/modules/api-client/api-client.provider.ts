@@ -61,9 +61,13 @@ async function readPayload(response: Response): Promise<unknown> {
 function toApiError(response: Response, payload: unknown) {
   const envelope = asRecord(payload);
   const error = asRecord(envelope?.error);
-  const code = stringValue(error?.code) ?? "request_failed";
+  const code =
+    stringValue(error?.code) ??
+    (response.status === 422 ? "validation_failed" : "request_failed");
   const message =
-    stringValue(error?.message) ?? "The request could not be completed.";
+    stringValue(error?.message) ??
+    stringValue(envelope?.message) ??
+    "The request could not be completed.";
   return new ApiClientError(
     message,
     response.status,
@@ -72,7 +76,7 @@ function toApiError(response: Response, payload: unknown) {
       stringValue(envelope?.requestId) ??
       response.headers.get("x-request-id") ??
       undefined,
-    readFields(error?.fields),
+    readFields(error?.fields) ?? readFields(envelope?.errors),
   );
 }
 

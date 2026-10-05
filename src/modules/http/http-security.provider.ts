@@ -5,11 +5,18 @@ import {
   type IncomingMessage,
   type ServerResponse,
 } from "node:http";
+import { createLimiter, validateRateLimit } from "./http-rate-limit.js";
 
 export interface RateLimitOptions {
   limit: number;
   windowMs: number;
   maxEntries?: number;
+  store?: RateLimitStore;
+  storeTimeoutMs?: number;
+}
+
+export interface RateLimitStore {
+  consume(address: string, limit: number, windowMs: number): Promise<number>;
 }
 
 export interface HttpSecurityOptions {
@@ -26,6 +33,10 @@ export interface HttpSecurityOptions {
 
 export interface HttpSecurityProvider {
   handle(request: IncomingMessage, response: ServerResponse): boolean;
+  handleAsync(
+    request: IncomingMessage,
+    response: ServerResponse,
+  ): Promise<boolean>;
   clientAddress(request: IncomingMessage): string;
 }
 
@@ -67,108 +78,149 @@ export function createHttpSecurityProvider(
     validateHeaderName(name);
     validateHeaderValue(name, value);
   }
-  const limiter = options.rateLimit
-    ? createLimiter(options.rateLimit)
-    : undefined;
+  const rateLimit = options.rateLimit;
+  if (rateLimit) validateRateLimit(rateLimit);
+  const limiter =
+    rateLimit && !rateLimit.store ? createLimiter(rateLimit) : undefined;
+  const storeTimeoutMs = rateLimit?.storeTimeoutMs ?? 2_000;
+  if (!Number.isSafeInteger(storeTimeoutMs) || storeTimeoutMs < 1)
+    throw new Error("Invalid rate limit store timeout.");
   const clientAddress = (request: IncomingMessage) =>
     resolveClientAddress(request, trustedProxies);
 
-  return {
-    handle(request, response) {
-      response.setHeader("X-Content-Type-Options", "nosniff");
-      response.setHeader("X-Frame-Options", "DENY");
-      response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-      for (const [name, value] of customHeaders)
-        response.setHeader(name, value);
+  const applyHeaders = (response: ServerResponse) => {
+    response.setHeader("X-Content-Type-Options", "nosniff");
+    response.setHeader("X-Frame-Options", "DENY");
+    response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+    for (const [name, value] of customHeaders) response.setHeader(name, value);
+  };
+  const processRequest = (
+    request: IncomingMessage,
+    response: ServerResponse,
+    retryAfter: number,
+  ) => {
+    applyHeaders(response);
+    if (retryAfter > 0) {
+      response.writeHead(429, {
+        "Content-Type": "application/json; charset=utf-8",
+        "Cache-Control": "no-store",
+        "Retry-After": String(retryAfter),
+      });
+      response.end(
+        JSON.stringify({
+          error: { code: "rate_limit_exceeded", message: "Too many requests." },
+        }),
+      );
+      return true;
+    }
 
-      if (limiter) {
-        const retryAfter = limiter(clientAddress(request));
-        if (retryAfter > 0) {
-          response.writeHead(429, {
-            "Content-Type": "application/json; charset=utf-8",
-            "Cache-Control": "no-store",
-            "Retry-After": String(retryAfter),
-          });
-          response.end(
-            JSON.stringify({
-              error: {
-                code: "rate_limit_exceeded",
-                message: "Too many requests.",
-              },
-            }),
-          );
-          return true;
-        }
-      }
+    const origin = request.headers.origin;
+    if (!origins.size || !origin) return false;
+    response.setHeader(
+      "Vary",
+      appendVary(response.getHeader("Vary"), "Origin"),
+    );
+    if (!origins.has(origin)) {
+      response.writeHead(403, { "Cache-Control": "no-store" });
+      response.end();
+      return true;
+    }
+    response.setHeader("Access-Control-Allow-Origin", origin);
+    if (options.allowCredentials)
+      response.setHeader("Access-Control-Allow-Credentials", "true");
+    if (exposedHeaders.length)
+      response.setHeader(
+        "Access-Control-Expose-Headers",
+        exposedHeaders.join(", "),
+      );
 
-      const origin = request.headers.origin;
-      if (!origins.size || !origin) return false;
+    const requestedMethod = request.headers["access-control-request-method"];
+    if (request.method === "OPTIONS" && requestedMethod) {
       response.setHeader(
         "Vary",
-        appendVary(response.getHeader("Vary"), "Origin"),
+        appendVary(
+          appendVary(
+            response.getHeader("Vary"),
+            "Access-Control-Request-Method",
+          ),
+          "Access-Control-Request-Headers",
+        ),
       );
-      if (!origins.has(origin)) {
+      const requestedHeaders = (
+        request.headers["access-control-request-headers"] ?? ""
+      )
+        .split(",")
+        .map((value) => value.trim())
+        .filter(Boolean);
+      if (
+        !methods.includes(requestedMethod) ||
+        requestedHeaders.some(
+          (name) =>
+            !headers.some(
+              (allowed) => allowed.toLowerCase() === name.toLowerCase(),
+            ),
+        )
+      ) {
         response.writeHead(403, { "Cache-Control": "no-store" });
         response.end();
         return true;
       }
-      response.setHeader("Access-Control-Allow-Origin", origin);
-      if (options.allowCredentials)
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-      if (exposedHeaders.length)
+      response.setHeader("Access-Control-Allow-Methods", methods.join(", "));
+      if (requestedHeaders.length)
         response.setHeader(
-          "Access-Control-Expose-Headers",
-          exposedHeaders.join(", "),
+          "Access-Control-Allow-Headers",
+          requestedHeaders.join(", "),
         );
+      response.setHeader("Access-Control-Max-Age", String(maxAge));
+      response.writeHead(204);
+      response.end();
+      return true;
+    }
+    if (!methods.includes(request.method ?? "GET")) {
+      response.writeHead(405, { Allow: methods.join(", ") });
+      response.end();
+      return true;
+    }
+    return false;
+  };
+  const handle = (request: IncomingMessage, response: ServerResponse) => {
+    if (rateLimit?.store)
+      throw new Error("A shared rate limit store requires handleAsync.");
+    return processRequest(
+      request,
+      response,
+      limiter?.(clientAddress(request)) ?? 0,
+    );
+  };
 
-      const requestedMethod = request.headers["access-control-request-method"];
-      if (request.method === "OPTIONS" && requestedMethod) {
-        response.setHeader(
-          "Vary",
-          appendVary(
-            appendVary(
-              response.getHeader("Vary"),
-              "Access-Control-Request-Method",
+  return {
+    handle,
+    async handleAsync(request, response) {
+      if (!rateLimit?.store) return handle(request, response);
+      applyHeaders(response);
+      let timer: ReturnType<typeof setTimeout> | undefined;
+      try {
+        const retryAfter = await Promise.race([
+          Promise.resolve().then(() =>
+            rateLimit.store!.consume(
+              clientAddress(request),
+              rateLimit.limit,
+              rateLimit.windowMs,
             ),
-            "Access-Control-Request-Headers",
           ),
-        );
-        const requestedHeaders = (
-          request.headers["access-control-request-headers"] ?? ""
-        )
-          .split(",")
-          .map((value) => value.trim())
-          .filter(Boolean);
-        if (
-          !methods.includes(requestedMethod) ||
-          requestedHeaders.some(
-            (name) =>
-              !headers.some(
-                (allowed) => allowed.toLowerCase() === name.toLowerCase(),
-              ),
-          )
-        ) {
-          response.writeHead(403, { "Cache-Control": "no-store" });
-          response.end();
-          return true;
-        }
-        response.setHeader("Access-Control-Allow-Methods", methods.join(", "));
-        if (requestedHeaders.length)
-          response.setHeader(
-            "Access-Control-Allow-Headers",
-            requestedHeaders.join(", "),
-          );
-        response.setHeader("Access-Control-Max-Age", String(maxAge));
-        response.writeHead(204);
-        response.end();
-        return true;
+          new Promise<never>((_, reject) => {
+            timer = setTimeout(
+              () => reject(new Error("Rate limit store timed out.")),
+              storeTimeoutMs,
+            );
+          }),
+        ]);
+        if (!Number.isSafeInteger(retryAfter) || retryAfter < 0)
+          throw new Error("Invalid rate limit store result.");
+        return processRequest(request, response, retryAfter);
+      } finally {
+        clearTimeout(timer);
       }
-      if (!methods.includes(request.method ?? "GET")) {
-        response.writeHead(405, { Allow: methods.join(", ") });
-        response.end();
-        return true;
-      }
-      return false;
     },
     clientAddress,
   };
@@ -190,37 +242,6 @@ function resolveClientAddress(
     if (!trustedProxies.has(candidate)) return candidate;
   }
   return peer;
-}
-
-function createLimiter(options: RateLimitOptions) {
-  const maxEntries = options.maxEntries ?? 10_000;
-  if (
-    !Number.isSafeInteger(options.limit) ||
-    options.limit < 1 ||
-    !Number.isSafeInteger(options.windowMs) ||
-    options.windowMs < 1 ||
-    !Number.isSafeInteger(maxEntries) ||
-    maxEntries < 1 ||
-    maxEntries > 100_000
-  ) {
-    throw new Error("Invalid rate limit.");
-  }
-  const clients = new Map<string, { count: number; resetAt: number }>();
-  return (address: string) => {
-    const now = Date.now();
-    for (const [key, record] of clients)
-      if (record.resetAt <= now) clients.delete(key);
-    let record = clients.get(address);
-    if (!record) {
-      if (clients.size >= maxEntries) return Math.ceil(options.windowMs / 1000);
-      record = { count: 0, resetAt: now + options.windowMs };
-      clients.set(address, record);
-    }
-    if (record.count >= options.limit)
-      return Math.max(1, Math.ceil((record.resetAt - now) / 1000));
-    record.count++;
-    return 0;
-  };
 }
 
 function validateOrigin(value: string) {

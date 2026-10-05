@@ -61,3 +61,27 @@ test("browser API client returns JSON and supports empty responses", async () =>
   });
   assert.equal(await empty.request("/resource"), undefined);
 });
+
+test("browser API client reads the standard validation envelope", async () => {
+  const client = createApiClient({
+    baseUrl: "https://app.example.test",
+    fetch: async () =>
+      new Response(
+        JSON.stringify({
+          message: "Validation failed",
+          errors: { name: ["Required"] },
+        }),
+        {
+          status: 422,
+          headers: { "Content-Type": "application/json" },
+        },
+      ),
+  });
+  await assert.rejects(client.request("/api/v1/people"), (error) => {
+    assert.ok(error instanceof ApiClientError);
+    assert.equal(error.code, "validation_failed");
+    assert.equal(error.message, "Validation failed");
+    assert.deepEqual(error.fields, { name: ["Required"] });
+    return true;
+  });
+});

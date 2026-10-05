@@ -239,3 +239,12 @@ Three-OS source CI passed: GitHub Actions run 37202026913 on Node 26.10.0 and np
 
 Source version: 0.1.9. Published package archives retain their existing versions.
 The baseline is recorded in projects/cxsun/agent/DEPENDENCY-BASELINE.json.
+
+## Framework 0.1.10 release - 2026-10-05
+
+- Authenticated `npm run mcp:connect` passed before repository work.
+- Added owner API routes, standard validation responses, typed provider contracts, request diagnostics, bounded asynchronous readiness, and an optional shared rate limit store.
+- `npm run release:check` passed: dependency order, version alignment, LF, 25 tests, TypeScript build, and package dry run.
+- The package dry run contains 25 files and no repository agent records or secrets.
+- Registry consumer, cross-app isolation, source push, and npm publication are pending in this record.
+- Deployed proxy, TLS, and performance acceptance require a target app and remain open.
