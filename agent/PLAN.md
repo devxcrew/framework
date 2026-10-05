@@ -1,5 +1,17 @@
 # Framework foundation owner plan
 
+## Package migration release - 2026-10-05
+
+- [x] Retrieve authenticated cloud guidance.
+- [x] Publish @devxcrew/framework 0.1.8 and @devxcrew/ui 0.2.0 under MIT.
+- [x] Verify all six existing apps and the UIUX gallery with their new registry dependencies.
+- [x] Verify two fresh registry apps, 44 tests and 52 source files each, live SQLite and cross-app denial.
+- [x] Record exact archive checksums, registry integrity and migration evidence.
+- [x] Commit and push the reviewed package migration under existing authorization.
+
+Historical checkpoints below retain their original package names and results.
+
+
 Date: 2026-10-04
 Status: Runtime subset implemented and reviewed locally. Release acceptance remains open.
 Master: projects/cxsun/agent/PLAN.md.

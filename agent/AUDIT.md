@@ -1,5 +1,24 @@
 # Verification evidence
 
+## Verified release evidence - 2026-10-05
+
+Seven runtime tests, build, metadata checks and the 13-file archive passed.
+Published @devxcrew/framework 0.1.8 under MIT. Registry integrity matches the prepared archive.
+Implementation changes contain package-name substitutions only.
+Two generated registry apps passed full verification, live SQLite and cross-app session denial.
+The isolated UIUX gallery passed registry installation and clean-install verification.
+Browser interaction, SMTP and production acceptance remain separate.
+
+
+## Package name migration - 2026-10-05
+
+- [x] Authenticated cloud governance and npm account verified.
+- [x] User authorized public MIT publication and existing app migration.
+- [x] Rename @devxcrew/core-framework to @devxcrew/framework 0.1.8, preserving public APIs.
+- [x] Verify the release archive and registry integrity after publication.
+- [x] Verify all six existing apps, the gallery and two fresh registry apps.
+- [x] Commit and push the reviewed release.
+
 ## Independent review - 2026-10-04
 
 Passed: `npm run mcp:connect` authenticated against the required cloud endpoint.

@@ -10,6 +10,16 @@ Changelog label: v 0.1.8
 
 ## v-0.1.8
 
+### [v 0.1.8] 2026-10-05 8:07 am - Publish shorter public package name
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Publish the MIT package under its shorter name with unchanged public APIs. Registry integrity matches the verified archive.
+
 ### Local completion preparation - 2026-10-04
 
 - Reconcile task status and preserve historical evidence.
@@ -296,3 +306,19 @@ Changelog label: v 0.1.8
 ## Unreleased startup completion - 2026-10-04
 
 Add bounded startup, cancellation and reverse cleanup regression. Seven tests and release:check pass. Proposed release 0.1.8.
+
+## Package name migration - 2026-10-05
+
+Release: @devxcrew/framework 0.1.8. License: MIT.
+The user approved publication under the shorter name. Public APIs stay unchanged.
+Historical names and release records remain available.
+
+Publication passed. Registry integrity matches the prepared MIT archive.
+
+### Package migration verification - 2026-10-05
+
+- Passed 7 tests, owner verification and applicable package checks.
+- All six application lockfiles use exact Framework 0.1.8 and UI 0.2.0 registry artifacts.
+- Two fresh registry apps passed 44 tests each, live SQLite and cross-app session denial.
+- The gallery passed source and isolated registry verification with bundle budgets.
+- Browser, real SMTP and production deployment acceptance remain separate.
