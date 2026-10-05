@@ -14,3 +14,7 @@ node_modules/
 coverage/
 
 .cache/
+
+.cache-npm-*
+
+*.tgz
