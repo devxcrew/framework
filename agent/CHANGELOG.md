@@ -8,7 +8,22 @@ Release tag: v-0.1.11
 
 Changelog label: v 0.1.11
 
+## Unreleased
+
+- Allow a production public URL to use a proxy port that differs from the Node listener.
+- Keep environment file loading, events, queues, and storage in their current owners until a shared consumer needs a contract.
+
 ## v-0.1.11
+
+### [v 0.1.11] 2026-10-05 12:46 pm - Verify proxy configuration and app consumers
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Record production URL proxy-port support, 25 tests and fresh source consumer acceptance; npm publication remains separate.
 
 ### [v 0.1.11] 2026-10-05 10:22 am - Clarify typed route example
 
@@ -373,3 +388,10 @@ Publication passed. Registry integrity matches the prepared MIT archive.
 
 Source version: 0.1.9. Published package archives retain their existing versions.
 The baseline is recorded in projects/cxsun/agent/DEPENDENCY-BASELINE.json.
+
+
+## Unreleased alignment - 2026-10-05
+
+Release checks (25 tests) and fresh source consumers passed. Deployed proxy/TLS remains untested; source correction requires a new release version.
+
+Authenticated live MCP verification passed. See the [alignment audit](D:/codexsun/projects/cxsun/agent/SHARED-ALIGNMENT.md). Version numbers remain unchanged. No release delivery was performed by this audit.

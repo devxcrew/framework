@@ -1,6 +1,6 @@
 # Remaining work
 
-1. Align validation errors with the shared API rule.
-2. Add module-owned route registration and typed provider contracts. Correct the README.
-3. Complete the published consumer isolation probe.
-4. Add operational adapters when a deployed app needs them.
+1. Verify production URL config in a consuming app before release.
+2. Upgrade the Cxsun registry fixture and check cross-app isolation.
+3. Check proxy, TLS, and response time in a deployed app.
+4. Add event, queue, or storage contracts only for an accepted consumer workflow.

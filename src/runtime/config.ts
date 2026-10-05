@@ -29,8 +29,9 @@ export function readApplicationConfig(
     throw new Error(
       "APP_URL must be an HTTP origin without credentials or a path.",
     );
-  if (Number(url.port || (url.protocol === "https:" ? 443 : 80)) !== port)
-    throw new Error("APP_URL must use APP_PORT.");
+  const publicPort = Number(url.port || (url.protocol === "https:" ? 443 : 80));
+  if (mode === "development" && publicPort !== port)
+    throw new Error("APP_URL must use APP_PORT in development.");
   return {
     name,
     port,

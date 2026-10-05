@@ -259,3 +259,20 @@ The baseline is recorded in projects/cxsun/agent/DEPENDENCY-BASELINE.json.
 - 0.1.11 source commit `63b8a49` was pushed; [Framework checks](https://github.com/devxcrew/framework/actions/runs/37265413148) passed.
 - npm accepted 0.1.11 with `latest`. Registry SHA-1 `4114200aed1c7738c1759b870964275f5059ef34` matches the packed archive.
 - A new registry consumer installed 0.1.11. Runtime imports and the README example under TypeScript 6 passed.
+
+## Config and infrastructure review - 2026-10-05
+
+- Authenticated MCP connection passed before this source review.
+- Current apps use `readApplicationConfig`. Their startup tools load `.env` and own extra settings.
+- No inspected Framework consumer requires shared event delivery, durable jobs, or object storage.
+- Source now permits a production public URL port to differ from `APP_PORT`. Development remains strict.
+- `npm run build`, `npm run lines:check`, `npm run check:versions`, and `git diff --check` passed.
+- No tests ran for this review. The production proxy behavior needs consumer verification.
+- This is an unreleased source change. No consumer or deployment acceptance is claimed.
+
+
+## Shared alignment audit - 2026-10-05
+
+Release checks (25 tests) and fresh source consumers passed. Deployed proxy/TLS remains untested; source correction requires a new release version.
+
+Authenticated live MCP verification passed. See the [alignment audit](D:/codexsun/projects/cxsun/agent/SHARED-ALIGNMENT.md). Version numbers remain unchanged. No release delivery was performed by this audit.

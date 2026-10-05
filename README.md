@@ -74,6 +74,8 @@ server.listen(3000);
 
 ## Operations
 
+- `readApplicationConfig` validates `APP_NAME`, `APP_PORT`, `APP_MODE`, and the public `APP_URL`. In development, the URL port must match `APP_PORT`. In production, a reverse proxy can expose a different HTTPS port. Set `APP_HOST` to the listen address when it differs from the public host.
+- Apps load `.env` with their own startup tool and validate their extra settings. Pass those values to `readApplicationConfig`. The Framework does not read files or secrets on import.
 - `createApplicationServer` sets basic security headers. Configure exact CORS origins, trusted proxy addresses, and rate limits for each app.
 - The built-in rate limiter is local to one process. Set `rateLimit.store` to an app-owned atomic shared store when deployment uses multiple instances. Store failures return 503.
 - Set `logger` for request logs. Set `onRequestComplete` to pass request data to a metrics or tracing adapter. Neither receives URL query values.
