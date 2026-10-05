@@ -9,7 +9,8 @@
 - Passed: Cxsun clean registry install and `npm run packages:check`.
 - Partial: two generated registry consumers passed app verification and live SQLite checks. The cross-app isolation probe failed because port 5192 refused a connection.
 - Blocked: npm publication returned `EOTP` and requires an npm one-time code. Version 0.1.9 is not published.
-- Open: verify the 0.1.9 registry install, then commit and push the reviewed source release.
+- Passed: source commit `3da2ff4` was pushed to `origin/main`.
+- Open: publish 0.1.9, then verify the registry install and public exports.
 
 ## Package reference cleanup - 2026-10-05
 

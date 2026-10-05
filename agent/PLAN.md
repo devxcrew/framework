@@ -1,16 +1,14 @@
 # Framework plan
 
-## Current base
+## Current release
 
-Framework 0.1.9 adds server validation, structured redacted logs, configurable HTTP security, dependency health checks, and a browser-safe API client.
+Framework 0.1.9 adds owner-local validation, structured redacted logging, HTTP security, health checks, and a browser-safe API client.
 
-## Release steps
+## Remaining steps
 
-1. Publish 0.1.9 after npm two-factor authentication.
+1. Publish 0.1.9 with npm two-factor authentication.
 2. Install 0.1.9 from npm and verify its public entry points.
-3. Commit and push the reviewed source release.
 
-## Later services
+## Future services
 
-Add database, cache, storage, queue, mail, webhook, or observability services only when a consumer needs them.
-Keep business code and schemas in their owning modules. Keep identity and tenancy in Platform Core.
+Add database, cache, storage, queue, mail, webhook, and observability support when a consumer needs them. Keep business rules and schemas inside their owning modules. Identity, roles, and tenancy belong to Platform Core.
