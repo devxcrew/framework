@@ -2,11 +2,23 @@
 
 ## Version State
 
-Current version: 0.1.10
+Current version: 0.1.11
 
-Release tag: v-0.1.10
+Release tag: v-0.1.11
 
-Changelog label: v 0.1.10
+Changelog label: v 0.1.11
+
+## v-0.1.11
+
+### [v 0.1.11] 2026-10-05 10:22 am - Clarify typed route example
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Make the README route provider example compile in a clean TypeScript consumer.
 
 ## v-0.1.10
 

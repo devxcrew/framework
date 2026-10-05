@@ -30,7 +30,7 @@ const statusToken = createModuleToken<{ routes: ApiRoute[] }>("status");
 const status = defineModuleProvider({
   token: statusToken,
   dependencies: [],
-  create: () => ({
+  create: (): { routes: ApiRoute[] } => ({
     routes: [
       {
         method: "GET",

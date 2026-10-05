@@ -248,3 +248,11 @@ The baseline is recorded in projects/cxsun/agent/DEPENDENCY-BASELINE.json.
 - The package dry run contains 25 files and no repository agent records or secrets.
 - Registry consumer, cross-app isolation, source push, and npm publication are pending in this record.
 - Deployed proxy, TLS, and performance acceptance require a target app and remain open.
+
+## Framework 0.1.11 documentation correction - 2026-10-05
+
+- 0.1.10 was pushed and published; npm `latest` and registry checksum matched its package archive.
+- A clean registry runtime consumer passed. Its unannotated README route factory caused a TypeScript 6 compiler crash.
+- Adding an explicit return type to that example passed TypeScript 6 in the clean consumer.
+- 0.1.11 `npm run release:check` passed with 25 tests, build, metadata, LF, and package dry run.
+- The Cxsun registry fixture still pins Framework 0.1.8. It cannot prove app isolation on this release without an app-owned upgrade.

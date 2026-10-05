@@ -1,6 +1,6 @@
 # Framework task
 
-## Release 0.1.10
+## Release 0.1.11
 
 - [x] Align server validation errors with the shared `message` and `errors` shape.
 - [x] Add module-owned `/api/v1` route registration and resource response examples.
@@ -8,7 +8,9 @@
 - [x] Add request diagnostics, bounded asynchronous health checks, and a shared rate limit store contract.
 - [x] Update the consumer README and keep prior error responses readable during migration.
 - [x] Run authenticated governance connection and the Framework test suite.
-- [ ] Verify a clean npm consumer and the Cxsun isolation probe.
+- [x] Verify a clean npm consumer for 0.1.10 and compile the corrected README example.
+- [ ] Verify a clean npm consumer for 0.1.11.
+- [ ] Run the Cxsun isolation probe after its app-owned release fixture adopts 0.1.11.
 - [ ] Complete source commit, push, and npm publication.
 
 ## App acceptance
