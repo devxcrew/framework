@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-05",
+  "package": "@devxcrew/framework",
+  "sourceVersion": "0.1.12",
+  "tests": 62,
+  "releaseChecks": "passed",
+  "registryStatus": "publication-in-progress",
+  "deferred": [
+    "production deployment",
+    "real SMTP delivery"
+  ],
+  "artifact": {
+    "filename": "devxcrew-framework-0.1.12.tgz",
+    "shasum": "844b7c6a69caa33524b348e36a4b860e094343b7",
+    "integrity": "sha512-M0MBWOE0IwHX5eYJ43Vr+ncdrllsxPhS9W6CWnGxjOsEh8P2z30UNib8vod2PLS46YVmP7a0Q+OSLhzvN/mONg=="
+  }
+}

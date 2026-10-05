@@ -315,3 +315,13 @@ Extract reusable database and settings.
 Framework owns database engines, validated execution, transactions, transfers, backups and settings. Release checks passed: 62 tests, build and package dry run. Migration history is preserved.
 
 Live authenticated governance connected. Local release checks passed. Commit and push authorized through github:now. Versions remain unchanged; npm publication is pending. GitHub Actions results must be checked after push. Secrets, runtime storage and caches are excluded.
+
+## npm release audit - 2026-10-05
+
+- [x] Retrieve authenticated live governance.
+- [x] Review public exports, dependency ownership and release artifact scope.
+- [x] Run owner release checks.
+- [ ] Verify registry installation and the latest tag.
+
+Source version: 0.1.12. SMTP and deployment acceptance remain deferred.
+Tools 0.1.9 already matches its published archive and needs no republish.

@@ -2,11 +2,11 @@
 
 ## Version State
 
-Current version: 0.1.11
+Current version: 0.1.12
 
-Release tag: v-0.1.11
+Release tag: v-0.1.12
 
-Changelog label: v 0.1.11
+Changelog label: v 0.1.12
 
 ## Unreleased
 
@@ -21,6 +21,18 @@ Changelog label: v 0.1.11
 
 - Allow a production public URL to use a proxy port that differs from the Node listener.
 - Keep environment file loading, events, queues, and storage in their current owners until a shared consumer needs a contract.
+
+## v-0.1.12
+
+### [v 0.1.12] 2026-10-05 8:25 pm - Release reusable database and settings contracts
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Publish audited database and settings infrastructure, production proxy configuration support and public provider exports. Preserve existing migration history.
 
 ## v-0.1.11
 

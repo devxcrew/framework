@@ -1,0 +1,511 @@
+{
+  "@devxcrew/framework": {
+    "id": "@devxcrew/framework@0.1.12",
+    "name": "@devxcrew/framework",
+    "version": "0.1.12",
+    "size": 33921,
+    "unpackedSize": 122192,
+    "shasum": "844b7c6a69caa33524b348e36a4b860e094343b7",
+    "integrity": "sha512-M0MBWOE0IwHX5eYJ43Vr+ncdrllsxPhS9W6CWnGxjOsEh8P2z30UNib8vod2PLS46YVmP7a0Q+OSLhzvN/mONg==",
+    "filename": "devxcrew-framework-0.1.12.tgz",
+    "files": [
+      {
+        "path": "LICENSE",
+        "size": 1065,
+        "mode": 420
+      },
+      {
+        "path": "README.md",
+        "size": 4586,
+        "mode": 420
+      },
+      {
+        "path": "dist/http/server.d.ts",
+        "size": 1337,
+        "mode": 420
+      },
+      {
+        "path": "dist/http/server.js",
+        "size": 7569,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.d.ts",
+        "size": 1352,
+        "mode": 420
+      },
+      {
+        "path": "dist/index.js",
+        "size": 841,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/api-client/api-client.provider.d.ts",
+        "size": 654,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/api-client/api-client.provider.js",
+        "size": 2925,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/common/database.schema.d.ts",
+        "size": 1268,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/common/database.schema.js",
+        "size": 1570,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/common/database.types.d.ts",
+        "size": 807,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/common/database.types.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/common/index.d.ts",
+        "size": 191,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/common/index.js",
+        "size": 114,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.connections.d.ts",
+        "size": 1390,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.connections.js",
+        "size": 7013,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.controller.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.controller.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.execution.d.ts",
+        "size": 1533,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.execution.js",
+        "size": 4267,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.migration.d.ts",
+        "size": 695,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.migration.js",
+        "size": 3619,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.provider.d.ts",
+        "size": 1849,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.provider.js",
+        "size": 1883,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.repository.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.repository.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.routes.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.routes.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.schema.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.schema.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.seed.d.ts",
+        "size": 207,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.seed.js",
+        "size": 288,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.service.d.ts",
+        "size": 499,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.service.js",
+        "size": 1025,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.transfer.d.ts",
+        "size": 776,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.transfer.js",
+        "size": 3511,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.types.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/database.types.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/index.d.ts",
+        "size": 360,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/index.js",
+        "size": 360,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.backup.d.ts",
+        "size": 296,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.backup.js",
+        "size": 6121,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.compatibility.d.ts",
+        "size": 427,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.compatibility.js",
+        "size": 3474,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.connection.d.ts",
+        "size": 239,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.connection.js",
+        "size": 866,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.schema.d.ts",
+        "size": 370,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/mariadb/mariadb.schema.js",
+        "size": 997,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/index.d.ts",
+        "size": 215,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/index.js",
+        "size": 215,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/sqlite.backup.d.ts",
+        "size": 172,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/sqlite.backup.js",
+        "size": 1874,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/sqlite.connection.d.ts",
+        "size": 691,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/sqlite.connection.js",
+        "size": 1427,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/sqlite.schema.d.ts",
+        "size": 93,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/drivers/sqlite/sqlite.schema.js",
+        "size": 429,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/index.d.ts",
+        "size": 1114,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/index.js",
+        "size": 951,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/operations/database.backup.d.ts",
+        "size": 340,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/operations/database.backup.js",
+        "size": 1137,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/operations/sqlite-import.d.ts",
+        "size": 352,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/database/operations/sqlite-import.js",
+        "size": 4697,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/health/health.provider.d.ts",
+        "size": 630,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/health/health.provider.js",
+        "size": 1682,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/http/http-rate-limit.d.ts",
+        "size": 240,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/http/http-rate-limit.js",
+        "size": 1170,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/http/http-security.provider.d.ts",
+        "size": 1107,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/http/http-security.provider.js",
+        "size": 8082,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/http/http.provider.d.ts",
+        "size": 1696,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/http/http.provider.js",
+        "size": 6751,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/logger/logger.provider.d.ts",
+        "size": 740,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/logger/logger.provider.js",
+        "size": 2969,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/runtime/runtime.provider.d.ts",
+        "size": 1603,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/runtime/runtime.provider.js",
+        "size": 5430,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/index.d.ts",
+        "size": 143,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/index.js",
+        "size": 65,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.controller.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.controller.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.migration.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.migration.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.provider.d.ts",
+        "size": 171,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.provider.js",
+        "size": 352,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.repository.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.repository.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.routes.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.routes.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.schema.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.schema.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.seed.d.ts",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.seed.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.service.d.ts",
+        "size": 495,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.service.js",
+        "size": 3451,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.types.d.ts",
+        "size": 416,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/settings/settings.types.js",
+        "size": 11,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/validation/validation.provider.d.ts",
+        "size": 311,
+        "mode": 420
+      },
+      {
+        "path": "dist/modules/validation/validation.provider.js",
+        "size": 693,
+        "mode": 420
+      },
+      {
+        "path": "dist/runtime/config.d.ts",
+        "size": 257,
+        "mode": 420
+      },
+      {
+        "path": "dist/runtime/config.js",
+        "size": 1301,
+        "mode": 420
+      },
+      {
+        "path": "package.json",
+        "size": 2122,
+        "mode": 420
+      }
+    ],
+    "entryCount": 99,
+    "bundled": []
+  }
+}
