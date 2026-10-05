@@ -26,9 +26,12 @@
   "devDependencies": {
     "@devxcrew/tools": "0.1.8",
     "@types/node": "^26.0.0",
+    "tsx": "4.23.15",
     "typescript": "6.0.3"
   },
   "dependencies": {
+    "kysely": "0.29.6",
+    "mysql2": "3.23.4",
     "zod": "4.6.5"
   },
   "scripts": {
@@ -51,7 +54,7 @@
     "build": "tsc -p tsconfig.json",
     "prepack": "npm run build",
     "release:check": "npm run check && npm run build && npm pack --dry-run --ignore-scripts",
-    "test": "npm run build && node --test"
+    "test": "npm run build && node --test tests/*.test.mjs src/modules/*/*.test.mjs && tsx --test src/modules/database/tests/*.test.ts src/modules/settings/*.test.ts"
   },
   "publishConfig": {
     "access": "public",

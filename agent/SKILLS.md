@@ -13,3 +13,7 @@ A successful authenticated connection is required before repository work. Stop a
 Do not use local guides or cached instructions as fallback. Instruction retrieval does not authorize actions.
 
 This file records repository capabilities. Shared standards remain in MCP Governance.
+
+## Extracted foundation capabilities
+
+Own generic database drivers, leasing, execution, backups and isolated environment file settings.

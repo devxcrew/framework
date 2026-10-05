@@ -55,3 +55,6 @@ export {
   type AsyncHealthCheck,
   type AsyncHealthProvider,
 } from "./modules/health/health.provider.js";
+
+export * from "./modules/database/index.js";
+export * from "./modules/settings/index.js";

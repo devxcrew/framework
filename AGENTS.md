@@ -1,6 +1,6 @@
 # framework agent notes
 
-Own reusable configuration validation and native HTTP primitives.
+Own reusable runtime, database drivers and execution, settings file handling, and native HTTP primitives.
 
 ## Module architecture
 

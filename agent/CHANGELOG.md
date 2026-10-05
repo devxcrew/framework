@@ -10,10 +10,29 @@ Changelog label: v 0.1.11
 
 ## Unreleased
 
+### 0.1.11 - 2026-10-05 19:21
+
+- Move generic database and settings behavior into Framework and tenant behavior into Platform.
+- Connect Cxsun through public exports and recorded development packages.
+- Preserve migration history and current tenant mappings.
+- Verify owner tests, app build, identity acceptance and live MariaDB fault checks.
+- Verify a fresh offline Cxsun installation from recorded packages without shared source imports.
+- Keep release versions unchanged. This work is not committed, pushed or published.
+
 - Allow a production public URL to use a proxy port that differs from the Node listener.
 - Keep environment file loading, events, queues, and storage in their current owners until a shared consumer needs a contract.
 
 ## v-0.1.11
+
+### [v 0.1.11] 2026-10-05 7:35 pm - Extract reusable database and settings
+
+#### Database Changes
+
+- Database update: No (manual).
+
+#### App Codebase Changes
+
+- Framework owns database engines, validated execution, transactions, transfers, backups and settings. Release checks passed: 62 tests, build and package dry run. Migration history is preserved.
 
 ### [v 0.1.11] 2026-10-05 12:46 pm - Verify proxy configuration and app consumers
 

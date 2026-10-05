@@ -92,3 +92,9 @@ npm run release:check
 ```
 
 Keep secrets in ignored environment files. Commit and publish through the repository release workflow only when authorized.
+
+## Database and environment settings
+
+Framework now owns createDatabaseProvider, DatabaseExecution, ResumableTransfer and createSettingsProvider.
+See agent/DATABASE.md for ownership and development use.
+These contracts are local source changes. Publish a new package version before using registry pins in other apps.

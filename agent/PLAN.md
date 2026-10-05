@@ -28,3 +28,10 @@ The 0.1.11 release supplies standard validation errors, owner routes, typed prov
 | Events | No inspected consumer needs shared event delivery. | Add a public event contract when an owner needs delivery. |
 | Queue | No inspected consumer needs durable jobs from this package. | Choose transport and retries with the first real job owner. |
 | Storage | No inspected consumer needs shared object storage. | Add an adapter contract with the first file-owning module. |
+
+## Foundation extraction - 2026-10-05
+
+The shared owner extraction is implemented and connected to Cxsun development snapshots.
+Release new package versions before changing other apps to registry pins.
+Use consumer verification for fresh installation and preserved-data upgrades.
+Production deployment acceptance remains open.
